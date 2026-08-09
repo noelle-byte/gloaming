@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cdeghg7uhhwaf" path="res://Scripts/fishing.gd" id="1_hiiat"]
 [ext_resource type="Script" uid="uid://lp7cih77ldbu" path="res://Scripts/return_button.gd" id="1_khl2u"]
 [ext_resource type="Script" uid="uid://cko7al6uo2s70" path="res://Scripts/world.gd" id="3_nwjj7"]
+[ext_resource type="Script" uid="uid://bbln2ibwfuqkw" path="res://Scripts/fish.gd" id="3_spj15"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwjj7"]
 size = Vector2(51, 24)
@@ -27,6 +28,7 @@ script = ExtResource("3_nwjj7")
 
 [node name="Fish1" type="Area2D" parent="World" unique_id=1163218952 groups=["fish"]]
 position = Vector2(895, 783)
+script = ExtResource("3_spj15")
 
 [node name="Polygon2D" type="Polygon2D" parent="World/Fish1" unique_id=1685332283]
 position = Vector2(13, -8)
@@ -39,6 +41,10 @@ shape = SubResource("RectangleShape2D_nwjj7")
 
 [node name="Fish2" type="Area2D" parent="World" unique_id=1294895070 groups=["fish"]]
 position = Vector2(335, 1087)
+script = ExtResource("3_spj15")
+display_name = "Pale Char"
+value = 12
+corruption = 2
 
 [node name="Polygon2D" type="Polygon2D" parent="World/Fish2" unique_id=799905182]
 position = Vector2(13, -8)
@@ -88,5 +94,35 @@ offset_right = 1259.0
 offset_bottom = 124.0
 text = "return"
 script = ExtResource("1_khl2u")
+
+[node name="CatchPanel" type="PanelContainer" parent="UI" unique_id=202254020]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 84.0
+offset_top = 13.0
+offset_right = 709.0
+offset_bottom = 714.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/CatchPanel" unique_id=1140729820]
+layout_mode = 2
+
+[node name="CatchName" type="Label" parent="UI/CatchPanel/VBoxContainer" unique_id=1916113816]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Trout"
+
+[node name="CatchValue" type="Label" parent="UI/CatchPanel/VBoxContainer" unique_id=1986710731]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Value: £3"
+
+[node name="KeepButton" type="Button" parent="UI/CatchPanel/VBoxContainer" unique_id=29664986]
+layout_mode = 2
+text = "KEEP"
+
+[node name="ThrowBackButton" type="Button" parent="UI/CatchPanel/VBoxContainer" unique_id=626706579]
+layout_mode = 2
+text = "THROW BACK"
 
 [connection signal="pressed" from="UI/ReturnButton" to="UI/ReturnButton" method="_on_pressed"]
