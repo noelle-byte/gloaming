@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://2r648or2l8gl"]
+
+[ext_resource type="Script" uid="uid://4v58dmom4w1c" path="res://Scripts/morning.gd" id="1_b3njg"]
+[ext_resource type="Script" uid="uid://bo8e0361crxg4" path="res://Scripts/day_label.gd" id="2_47tcd"]
+
+[sub_resource type="Gradient" id="Gradient_47tcd"]
+colors = PackedColorArray(0.5282587, 0.057558432, 0.7950316, 1, 0.5294118, 0.05882353, 0.79607844, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wxofe"]
+gradient = SubResource("Gradient_47tcd")
+
+[node name="Morning" type="Control" unique_id=2002616809]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_b3njg")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1218316854]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1113.0
+offset_bottom = 608.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture1D_wxofe")
+
+[node name="Protrait" type="TextureRect" parent="." unique_id=1709701414]
+layout_mode = 0
+offset_left = 78.0
+offset_top = 116.0
+offset_right = 343.0
+offset_bottom = 478.0
+
+[node name="DialoguePannel" type="PanelContainer" parent="." unique_id=1153004945]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 480.0
+offset_right = 1136.0
+offset_bottom = 636.0
+
+[node name="MarginContainer" type="MarginContainer" parent="DialoguePannel" unique_id=2039550141]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DialoguePannel/MarginContainer" unique_id=1396765544]
+layout_mode = 2
+
+[node name="Speaker" type="Label" parent="DialoguePannel/MarginContainer/VBoxContainer" unique_id=1218816902]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Dialogue" type="Label" parent="DialoguePannel/MarginContainer/VBoxContainer" unique_id=1400030838]
+unique_name_in_owner = true
+layout_mode = 2
+text = "test text"
+autowrap_mode = 2
+
+[node name="Continue" type="Button" parent="DialoguePannel/MarginContainer/VBoxContainer" unique_id=728440732]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DayLabel" type="Label" parent="." unique_id=493728219]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 910.0
+offset_top = 73.0
+offset_right = 1070.0
+offset_bottom = 117.0
+script = ExtResource("2_47tcd")

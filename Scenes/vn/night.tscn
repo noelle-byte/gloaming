@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bwbwf300ayp7i"]
+
+[ext_resource type="Script" uid="uid://o2ofidbtaea0" path="res://Scripts/sleep.gd" id="1_txvrf"]
+
+[node name="Night" type="Control" unique_id=1594188786]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="." unique_id=341962365]
+layout_mode = 0
+offset_left = 282.0
+offset_top = 189.0
+offset_right = 594.0
+offset_bottom = 279.0
+text = "its night time, go to bed"
+
+[node name="Sleep" type="Button" parent="." unique_id=810308518]
+layout_mode = 0
+offset_left = 683.0
+offset_top = 320.0
+offset_right = 882.0
+offset_bottom = 454.0
+text = "sleep"
+script = ExtResource("1_txvrf")
+
+[connection signal="pressed" from="Sleep" to="Sleep" method="_on_pressed"]
