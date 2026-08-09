@@ -29,9 +29,13 @@ func _process(delta: float) -> void:
 
 
 func _on_area_entered(area: Area2D) -> void:
+	if not can_move:
+		return
+
 	if area.is_in_group("fish"):
-		print("HOOK HIT: ", area.name)
-		
 		can_move = false
-		monitoring = false
+
+		set_deferred("monitoring", false)
+
+		print("HOOK HIT: ", area.name)
 		fish_caught.emit(area)

@@ -28,7 +28,7 @@ func _on_fish_caught(fish: Area2D) -> void:
 
 	print("Caught ", fish.name)
 
-	reel_in(current_fish)
+	call_deferred("reel_in", fish)
 
 
 func reel_in(fish: Fish) -> void:
