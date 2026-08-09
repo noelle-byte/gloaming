@@ -6,6 +6,8 @@ signal fish_caught(fish: Area2D)
 
 var can_move := true
 
+func _ready() -> void:
+	area_entered.connect(_on_area_entered)
 
 func _process(delta: float) -> void:
 	if not can_move:
@@ -28,6 +30,8 @@ func _process(delta: float) -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("fish"):
+		print("HOOK HIT: ", area.name)
+		
 		can_move = false
 		monitoring = false
 		fish_caught.emit(area)
