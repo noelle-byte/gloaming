@@ -3,9 +3,11 @@
 [ext_resource type="Script" uid="uid://chfer3vvn2gjv" path="res://Scripts/hook.gd" id="1_et7wu"]
 [ext_resource type="Script" uid="uid://cdeghg7uhhwaf" path="res://Scripts/fishing.gd" id="1_hiiat"]
 [ext_resource type="Script" uid="uid://lp7cih77ldbu" path="res://Scripts/return_button.gd" id="1_khl2u"]
+[ext_resource type="PackedScene" uid="uid://dmla5gib1rpjb" path="res://Scenes/fishing/chunks/default_chunk.tscn" id="3_46q8q"]
 [ext_resource type="PackedScene" uid="uid://b0flphmjxa2ym" path="res://Scenes/fishing/fish/trout.tscn" id="3_hit5c"]
 [ext_resource type="Script" uid="uid://cko7al6uo2s70" path="res://Scripts/world.gd" id="3_nwjj7"]
 [ext_resource type="PackedScene" uid="uid://4ur6gvcy7eg3" path="res://Scenes/fishing/fish/pale_char.tscn" id="4_46q8q"]
+[ext_resource type="PackedScene" uid="uid://m83v5667y1tr" path="res://Scenes/fishing/chunks/entry_chunk.tscn" id="4_qsnlf"]
 [ext_resource type="PackedScene" uid="uid://d210cwd6v5q2u" path="res://Scenes/fishing/obstacles/rock.tscn" id="5_qsnlf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qsnlf"]
@@ -22,6 +24,7 @@ color = Color(0.006175897, 0.13546506, 0.521067, 1)
 [node name="World" type="Node2D" parent="." unique_id=1722049636]
 script = ExtResource("3_nwjj7")
 scroll_speed = 100.0
+chunk_scenes = Array[PackedScene]([ExtResource("3_46q8q"), ExtResource("4_qsnlf")])
 fish_scenes = Array[PackedScene]([ExtResource("3_hit5c"), ExtResource("4_46q8q")])
 obstacle_scenes = Array[PackedScene]([ExtResource("5_qsnlf")])
 corruption_depth_step = 15.0

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://m83v5667y1tr"]
+
+[ext_resource type="Script" uid="uid://bqoa741kyf1rn" path="res://Scripts/lake_chunk.gd" id="1_mohfq"]
+
+[node name="EntryChunk" type="Node2D" unique_id=1872930148]
+script = ExtResource("1_mohfq")
+chunk_name = "Entry"
+selection_weight = 0.0
+can_spawn_randomly = false
+guaranteed_depth = 0.0
+fish_mode = 2
+terrain_mode = 2
+
+[node name="Generated" type="Node2D" parent="." unique_id=128922751]
