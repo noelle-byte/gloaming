@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://d210cwd6v5q2u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spj15"]
+size = Vector2(194.5, 101)
+
+[node name="Rock1" type="Area2D" unique_id=290889553 groups=["obstacle"]]
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=542107706]
+polygon = PackedVector2Array(0, 0, 200, 0, 200, 100, 0, 100)
+uv = PackedVector2Array(-145.5, -8, 96.5, -7, 95.5, 98, -141.5, 98)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=413904955]
+position = Vector2(99.75, 51.5)
+shape = SubResource("RectangleShape2D_spj15")
