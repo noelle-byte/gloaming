@@ -26,6 +26,9 @@ func _on_fish_caught(fish: Area2D) -> void:
 
 	current_fish = fish as Fish
 
+	if current_fish != null:
+		current_fish.on_caught()
+
 	print("Caught ", fish.name)
 
 	call_deferred("reel_in", fish)

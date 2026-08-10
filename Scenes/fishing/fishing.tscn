@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://b0flphmjxa2ym" path="res://Scenes/fishing/fish/trout.tscn" id="3_hit5c"]
 [ext_resource type="Script" uid="uid://cko7al6uo2s70" path="res://Scripts/world.gd" id="3_nwjj7"]
 [ext_resource type="PackedScene" uid="uid://4ur6gvcy7eg3" path="res://Scenes/fishing/fish/pale_char.tscn" id="4_46q8q"]
-[ext_resource type="Script" uid="uid://sr42qfkltglh" path="res://Scripts/normal_fish.gd" id="4_qsnlf"]
 [ext_resource type="PackedScene" uid="uid://d210cwd6v5q2u" path="res://Scenes/fishing/obstacles/rock.tscn" id="5_qsnlf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qsnlf"]
@@ -29,13 +28,9 @@ obstacle_scenes = Array[PackedScene]([ExtResource("5_qsnlf")])
 
 [node name="Fish1" parent="World" unique_id=1567173245 instance=ExtResource("3_hit5c")]
 position = Vector2(895, 783)
-script = ExtResource("4_qsnlf")
-swim_speed = 100.0
 
 [node name="Fish2" parent="World" unique_id=1363872635 instance=ExtResource("4_46q8q")]
 position = Vector2(335, 1087)
-script = ExtResource("4_qsnlf")
-swim_speed = 60.0
 
 [node name="Rock1" parent="World" unique_id=290889553 instance=ExtResource("5_qsnlf")]
 position = Vector2(558, 1401)

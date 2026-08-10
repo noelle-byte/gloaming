@@ -5,6 +5,8 @@ extends Fish
 
 var swim_direction: float
 
+@onready var visual: Node2D = $Polygon2D
+
 
 func _ready() -> void:
 	super._ready()
@@ -14,6 +16,8 @@ func _ready() -> void:
 	else:
 		swim_direction = 1.0
 
+	_update_facing()
+
 
 func _process(delta: float) -> void:
 	position.x += swim_speed * swim_direction * delta
@@ -22,6 +26,16 @@ func _process(delta: float) -> void:
 
 	if global_position.x <= 30.0 and swim_direction < 0.0:
 		swim_direction = 1.0
+		_update_facing()
 
-	elif global_position.x >= screen_width - 30.0 and swim_direction > 0.0:
+	elif (
+		global_position.x >= screen_width - 30.0
+		and swim_direction > 0.0
+	):
 		swim_direction = -1.0
+		_update_facing()
+
+
+func _update_facing() -> void:
+	# Current placeholder artwork faces left by default.
+	visual.scale.x = -swim_direction
