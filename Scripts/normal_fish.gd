@@ -5,8 +5,6 @@ extends Fish
 
 var swim_direction: float
 
-@onready var visual: Node2D = $Visual
-
 
 func _ready() -> void:
 	super._ready()
@@ -28,14 +26,10 @@ func _process(delta: float) -> void:
 		swim_direction = 1.0
 		_update_facing()
 
-	elif (
-		global_position.x >= screen_width - 30.0
-		and swim_direction > 0.0
-	):
+	elif global_position.x >= screen_width - 30.0 and swim_direction > 0.0:
 		swim_direction = -1.0
 		_update_facing()
 
 
 func _update_facing() -> void:
-	# Assuming the placeholder art naturally faces left.
-	visual.scale.x = -swim_direction
+	scale.x = -swim_direction
