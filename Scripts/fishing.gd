@@ -14,6 +14,7 @@ var current_fish: Fish
 
 func _ready() -> void:
 	hook.fish_caught.connect(_on_fish_caught)
+	hook.cast_failed.connect(_on_cast_failed)
 
 	keep_button.pressed.connect(_on_keep_pressed)
 	throw_back_button.pressed.connect(_on_throw_back_pressed)
@@ -32,6 +33,15 @@ func _on_fish_caught(fish: Area2D) -> void:
 	print("Caught ", fish.name)
 
 	call_deferred("reel_in", fish)
+
+func _on_cast_failed(reason: String) -> void:
+	world.stop_scrolling()
+
+	print(reason)
+
+	await get_tree().create_timer(0.4).timeout
+
+	start_new_cast()
 
 
 func reel_in(fish: Fish) -> void:

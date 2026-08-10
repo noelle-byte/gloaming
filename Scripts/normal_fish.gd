@@ -5,7 +5,7 @@ extends Fish
 
 var swim_direction: float
 
-@onready var visual: Node2D = $Polygon2D
+@onready var visual: Node2D = $Visual
 
 
 func _ready() -> void:
@@ -37,5 +37,5 @@ func _process(delta: float) -> void:
 
 
 func _update_facing() -> void:
-	# Current placeholder artwork faces left by default.
+	# Assuming the placeholder art naturally faces left.
 	visual.scale.x = -swim_direction

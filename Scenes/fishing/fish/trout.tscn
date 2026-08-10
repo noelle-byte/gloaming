@@ -3,17 +3,16 @@
 [ext_resource type="Script" uid="uid://sr42qfkltglh" path="res://Scripts/normal_fish.gd" id="1_xilux"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwjj7"]
-size = Vector2(51, 24)
+size = Vector2(48.5, 18)
 
 [node name="Fish1" type="Area2D" unique_id=1567173245 groups=["fish"]]
 script = ExtResource("1_xilux")
 swim_speed = 100.0
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=15343784]
-position = Vector2(13, -8)
+position = Vector2(-21, -9)
 polygon = PackedVector2Array(0, 0, 35, 0, 45, 9, 55, 0, 55, 18, 45, 9, 35, 18, 1, 18, -10, 9)
 uv = PackedVector2Array(28.576843, -19.613396, 149.47021, -19.613396, 179.5228, 4.975086, 217.08856, -25.077503, 215.72253, 29.563572, 179.5228, 4.2920723, 148.7872, 26.831516, 29.942871, 23.416447, 1.2563171, 3.6090584)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=858285246]
-position = Vector2(36, 1)
 shape = SubResource("RectangleShape2D_nwjj7")
