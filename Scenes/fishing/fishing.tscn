@@ -26,16 +26,7 @@ obstacle_scenes = Array[PackedScene]([ExtResource("5_qsnlf")])
 
 [node name="Generated" type="Node2D" parent="World" unique_id=1732409872]
 
-[node name="Fish1" parent="World" unique_id=1567173245 instance=ExtResource("3_hit5c")]
-position = Vector2(895, 783)
-
-[node name="Fish2" parent="World" unique_id=1363872635 instance=ExtResource("4_46q8q")]
-position = Vector2(335, 1087)
-
-[node name="Rock1" parent="World" unique_id=290889553 instance=ExtResource("5_qsnlf")]
-position = Vector2(558, 1401)
-
-[node name="Hook" type="Area2D" parent="." unique_id=271214012]
+[node name="Hook" type="CharacterBody2D" parent="." unique_id=1342734860]
 position = Vector2(641, 347.00003)
 scale = Vector2(33.5, 39.5)
 script = ExtResource("1_et7wu")
@@ -45,7 +36,14 @@ polygon = PackedVector2Array(0.5, 0, 0, 0, 0, 1.5, -0.5, 1.5, -1, 1, -0.6, 2, 0,
 uv = PackedVector2Array(0.73052883, -0.015203178, -0.38621426, -0.07556766, -0.48555374, 1.524549, -1.3693504, 2.1653016, -2.0763884, 1.3698845, -2.5403814, 2.297871, -1.789154, 2.8281488, 0.04472351, 2.1653016)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hook" unique_id=1647743139]
-position = Vector2(-0.23880565, 1.3924047)
+position = Vector2(-0.23880959, 1.3924046)
+scale = Vector2(1, 0.9999999)
+shape = SubResource("CircleShape2D_qsnlf")
+
+[node name="CatchArea" type="Area2D" parent="Hook" unique_id=1227494707]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hook/CatchArea" unique_id=1021886728]
+position = Vector2(-0.23880959, 1.3924046)
 scale = Vector2(1, 0.9999999)
 shape = SubResource("CircleShape2D_qsnlf")
 

@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var world: Node2D = $World
-@onready var hook: Area2D = $Hook
+@onready var hook: CharacterBody2D = $Hook
 
 @onready var catch_panel: Control = %CatchPanel
 @onready var catch_name: Label = %CatchName

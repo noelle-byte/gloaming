@@ -1,121 +1,89 @@
-extends Area2D
+extends CharacterBody2D
 
 signal fish_caught(fish: Area2D)
-signal cast_failed(reason: String)
 
-@export var speed := 350.0
+@export var speed: float = 350.0
 
-# How violently normal rocks shove the hook.
-@export var rock_push_distance := 110.0
+# Tiny bump away from rocks.
+# This should feel like resistance, not knockback.
+@export var rock_bump_strength: float = 25.0
+
+@export var bump_decay: float = 150.0
 
 var can_move := true
+var bump_velocity := Vector2.ZERO
+
+@onready var catch_area: Area2D = $CatchArea
 
 
 func _ready() -> void:
-	area_entered.connect(_on_area_entered)
+	catch_area.area_entered.connect(_on_catch_area_entered)
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not can_move:
+		velocity = Vector2.ZERO
 		return
 
-	var direction := Input.get_vector(
+	var input_direction := Input.get_vector(
 		"ui_left",
 		"ui_right",
 		"ui_up",
 		"ui_down"
 	)
 
-	position += direction * speed * delta
+	velocity = input_direction * speed + bump_velocity
 
+	move_and_slide()
+
+	# If we touched terrain, give the hook a very small
+	# shove away from the surface.
+	for i in range(get_slide_collision_count()):
+		var collision := get_slide_collision(i)
+		var collider := collision.get_collider()
+
+		if collider != null and collider.is_in_group("obstacle"):
+			bump_velocity = (
+				collision.get_normal()
+				* rock_bump_strength
+			)
+
+	# Quickly fade the bump back to zero.
+	bump_velocity = bump_velocity.move_toward(
+		Vector2.ZERO,
+		bump_decay * delta
+	)
+
+	_keep_on_screen()
+
+
+func _keep_on_screen() -> void:
 	var screen_size := get_viewport_rect().size
 
-	position.x = clamp(
-		position.x,
+	global_position.x = clamp(
+		global_position.x,
 		20.0,
 		screen_size.x - 20.0
 	)
 
-	position.y = clamp(
-		position.y,
+	global_position.y = clamp(
+		global_position.y,
 		20.0,
 		screen_size.y - 20.0
 	)
 
 
-func _on_area_entered(area: Area2D) -> void:
+func _on_catch_area_entered(area: Area2D) -> void:
 	if not can_move:
 		return
 
-	if area.is_in_group("fish"):
-		_catch_fish(area)
-
-	elif area.is_in_group("obstacle"):
-		_hit_basic_obstacle(area)
-
-
-func _catch_fish(fish: Area2D) -> void:
-	can_move = false
-
-	set_deferred("monitoring", false)
-
-	print("HOOK HIT: ", fish.name)
-
-	fish_caught.emit(fish)
-
-
-func _hit_basic_obstacle(obstacle: Area2D) -> void:
-	var obstacle_center := obstacle.global_position
-
-	# Your current rocks have their origin at the
-	# corner rather than the centre, so use the
-	# collision shape's centre if possible.
-	var obstacle_collision := obstacle.get_node_or_null(
-		"CollisionShape2D"
-	)
-
-	if obstacle_collision is CollisionShape2D:
-		obstacle_center = obstacle_collision.global_position
-
-	var push_direction := (
-		global_position - obstacle_center
-	).normalized()
-
-	# Extremely unlikely, but prevents a zero vector
-	# if we're precisely in the middle of the rock.
-	if push_direction == Vector2.ZERO:
-		push_direction = Vector2.UP
-
-	var target_position := (
-		global_position
-		+ push_direction * rock_push_distance
-	)
-
-	if _would_be_off_screen(target_position):
-		global_position = target_position
-		_fail_cast("Hook knocked off course")
+	if not area.is_in_group("fish"):
 		return
 
-	global_position = target_position
-
-
-func _would_be_off_screen(target: Vector2) -> bool:
-	var screen_size := get_viewport_rect().size
-
-	var margin := 20.0
-
-	return (
-		target.x < margin
-		or target.x > screen_size.x - margin
-		or target.y < margin
-		or target.y > screen_size.y - margin
-	)
-
-
-func _fail_cast(reason: String) -> void:
 	can_move = false
-	set_deferred("monitoring", false)
 
-	print("CAST FAILED: ", reason)
+	catch_area.set_deferred("monitoring", false)
 
-	cast_failed.emit(reason)
+	print("HOOK HIT: ", area.name)
+
+	fish_caught.emit(area)
