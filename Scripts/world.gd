@@ -1,39 +1,52 @@
 extends Node2D
 
 
-### SCROLLING / DEPTH
+### DEPTH
 
 @export_category("Depth")
 
 @export var scroll_speed: float = 120.0
 
-# How many pixels of scrolling equal one metre.
-# Pure gameplay value - we'll tune this by feel.
 @export var pixels_per_meter: float = 50.0
 
 
-### SPAWN SCENES
+### CHUNKS
 
-@export_category("Spawn Scenes")
+@export_category("Chunks")
+
+# One chunk is currently roughly one viewport tall.
+@export var chunk_height: float = 730.0
+
+# Keep this many chunks prepared beyond the viewport.
+@export var chunks_ahead: int = 2
+
+# Put default_chunk.tscn and every special chunk here.
+@export var chunk_scenes: Array[PackedScene] = []
+
+@export var cleanup_buffer: float = 150.0
+
+
+### DEFAULT SPAWN POOLS
+
+@export_category("Default Spawn Pools")
 
 @export var fish_scenes: Array[PackedScene] = []
 @export var obstacle_scenes: Array[PackedScene] = []
 
+@export var horizontal_margin: float = 60.0
 
-### SPAWN RATES
 
-@export_category("Spawn Rates")
+### DENSITY
 
-# Fish stay reasonably common regardless of depth.
-@export var fish_spawn_interval: float = 0.75
+@export_category("Density")
 
-# Rocks/debris start relatively sparse.
-@export var surface_obstacle_interval: float = 1.8
+@export var surface_fish_per_chunk: int = 7
 
-# But never become denser than this.
-@export var minimum_obstacle_interval: float = 0.35
+@export var surface_obstacles_per_chunk: int = 3
 
-# Higher = obstacles get dense faster as we descend.
+@export var maximum_obstacles_per_chunk: int = 15
+
+# Higher = terrain becomes denser faster.
 @export var obstacle_density_per_meter: float = 0.03
 
 
@@ -41,78 +54,55 @@ extends Node2D
 
 @export_category("Fish Depth Weighting")
 
-# Preferred depth of a corruption 0 fish.
 @export var shallow_preferred_depth: float = 5.0
 
-# Every corruption point moves the preferred depth down by this many metres.
 @export var corruption_depth_step: float = 10.0
 
-# Higher values mean species can commonly appear farther away from their preferred depth.
 @export var depth_spread: float = 12.0
 
-# Future bait modifier
+# Future bait:
 # 1.0 = neutral
-# 0.8 = biases spawns shallower
-# 1.2 = biases spawns deeper
+# 0.8 = shallower bias
+# 1.2 = deeper bias
 @export var bait_depth_modifier: float = 1.0
-
-
-### POSITIONING
-
-@export_category("Positioning")
-
-@export var horizontal_margin: float = 60.0
-@export var spawn_buffer: float = 100.0
-@export var cleanup_buffer: float = 150.0
 
 
 ### STATE
 
 var scrolling := true
 
-var fish_timer: float
-var obstacle_timer: float
-
-var fish_corruptions: Array[int] = []
+var next_chunk_index: int = 0
 
 var rng := RandomNumberGenerator.new()
 
-@onready var generated: Node2D = $Generated
+# PackedScene -> corruption
+var fish_corruption_cache: Dictionary = {}
+
+# Cached information about chunk scenes.
+var chunk_metadata: Array[Dictionary] = []
+
+# Used so guaranteed chunks don't repeat.
+var used_guaranteed_chunks: Dictionary = {}
+
+
+@onready var chunks: Node2D = $Chunks
 
 
 func _ready() -> void:
 	rng.randomize()
 
-	_cache_fish_corruptions()
+	_cache_chunk_metadata()
 
-	fish_timer = fish_spawn_interval
-	obstacle_timer = surface_obstacle_interval
+	_ensure_chunks()
 
 
 func _physics_process(delta: float) -> void:
 	if scrolling:
 		position.y -= scroll_speed * delta
 
-		fish_timer -= delta
-		obstacle_timer -= delta
+		_ensure_chunks()
 
-		if fish_timer <= 0.0:
-			_spawn_fish()
-
-			fish_timer = (
-				fish_spawn_interval
-				* rng.randf_range(0.75, 1.25)
-			)
-
-		if obstacle_timer <= 0.0:
-			_spawn_obstacle()
-
-			obstacle_timer = (
-				_get_obstacle_interval()
-				* rng.randf_range(0.75, 1.25)
-			)
-
-	_cleanup_generated()
+	_cleanup_chunks()
 
 
 ### DEPTH
@@ -124,51 +114,350 @@ func get_depth() -> float:
 	)
 
 
-### FISH SPAWNING
+### CHUNK GENERATION
 
-func _spawn_fish() -> void:
-	if fish_scenes.is_empty():
+func _ensure_chunks() -> void:
+	var screen_height := get_viewport_rect().size.y
+
+	# Where the bottom of the viewport currently is
+	# in World-local coordinates.
+	var viewport_bottom := (
+		-position.y
+		+ screen_height
+	)
+
+	var generation_limit := (
+		viewport_bottom
+		+ chunk_height * chunks_ahead
+	)
+
+	while (
+		next_chunk_index * chunk_height
+		< generation_limit
+	):
+		_spawn_chunk(next_chunk_index)
+
+		next_chunk_index += 1
+
+
+func _spawn_chunk(chunk_index: int) -> void:
+	if chunk_scenes.is_empty():
+		push_warning("World has no chunk scenes.")
 		return
 
-	var fish_scene := _choose_fish_for_depth()
+	var chunk_y := chunk_index * chunk_height
 
-	if fish_scene == null:
+	var start_depth := (
+		chunk_y / pixels_per_meter
+	)
+
+	var end_depth := (
+		(chunk_y + chunk_height)
+		/ pixels_per_meter
+	)
+
+	var chunk_scene := _choose_chunk_scene(
+		start_depth,
+		end_depth
+	)
+
+	if chunk_scene == null:
 		return
 
-	var fish := fish_scene.instantiate()
+	var chunk := chunk_scene.instantiate() as LakeChunk
 
-	generated.add_child(fish)
+	if chunk == null:
+		push_warning(
+			"Chunk scene does not inherit LakeChunk."
+		)
+		return
 
-	fish.position = _get_spawn_position()
+	chunks.add_child(chunk)
+
+	chunk.position = Vector2(
+		0.0,
+		chunk_y
+	)
+
+	print(
+		"CHUNK: ",
+		chunk.chunk_name,
+		" ",
+		start_depth,
+		"m - ",
+		end_depth,
+		"m"
+	)
+
+	_populate_chunk(
+		chunk,
+		start_depth,
+		end_depth
+	)
 
 
-func _choose_fish_for_depth() -> PackedScene:
-	var actual_depth := get_depth()
 
-	# Right now this does nothing because the
-	# modifier is 1.0.
-	#
-	# Later bait can make the spawn table behave
-	# as though we're slightly deeper or shallower.
+### CHUNK SELECTION
+
+
+func _choose_chunk_scene(
+	start_depth: float,
+	end_depth: float
+) -> PackedScene:
+
+	# Guaranteed chunks get first priority.
+
+	for data in chunk_metadata:
+		var guaranteed: float = data["guaranteed_depth"]
+
+		if guaranteed < 0.0:
+			continue
+
+		var key: String = data["path"]
+
+		if used_guaranteed_chunks.has(key):
+			continue
+
+		if (
+			guaranteed >= start_depth
+			and guaranteed < end_depth
+		):
+			used_guaranteed_chunks[key] = true
+
+			return data["scene"]
+
+
+	# Random eligible chunks
+
+	var eligible: Array[PackedScene] = []
+	var weights := PackedFloat32Array()
+
+	var middle_depth := (
+		start_depth + end_depth
+	) * 0.5
+
+	for data in chunk_metadata:
+
+		if not data["can_spawn_randomly"]:
+			continue
+
+		var minimum: float = data["minimum_depth"]
+		var maximum: float = data["maximum_depth"]
+
+		if middle_depth < minimum:
+			continue
+
+		if (
+			maximum >= 0.0
+			and middle_depth > maximum
+		):
+			continue
+
+		eligible.append(data["scene"])
+
+		weights.append(
+			max(
+				0.001,
+				data["selection_weight"]
+			)
+		)
+
+	if eligible.is_empty():
+		# First chunk scene should always be Default.
+		return chunk_scenes[0]
+
+	var chosen := rng.rand_weighted(weights)
+
+	return eligible[chosen]
+
+
+### POPULATING CHUNKS
+
+func _populate_chunk(
+	chunk: LakeChunk,
+	start_depth: float,
+	end_depth: float
+) -> void:
+
+	var spawn_parent := (
+		chunk.get_generated_parent()
+	)
+
+	# Obstacles first.
+	_generate_chunk_terrain(
+		chunk,
+		spawn_parent,
+		start_depth,
+		end_depth
+	)
+
+	# Then fish.
+	_generate_chunk_fish(
+		chunk,
+		spawn_parent,
+		start_depth,
+		end_depth
+	)
+
+
+### TERRAIN
+
+func _generate_chunk_terrain(
+	chunk: LakeChunk,
+	parent: Node2D,
+	start_depth: float,
+	end_depth: float
+) -> void:
+
+	if chunk.terrain_mode == LakeChunk.SpawnMode.NONE:
+		return
+
+	var pool: Array[PackedScene]
+
+	if (
+		chunk.terrain_mode
+		== LakeChunk.SpawnMode.OVERRIDE
+	):
+		pool = chunk.terrain_override
+	else:
+		pool = obstacle_scenes
+
+	if pool.is_empty():
+		return
+
+	var middle_depth := (
+		start_depth + end_depth
+	) * 0.5
+
+	var density := (
+		1.0
+		+ middle_depth
+		* obstacle_density_per_meter
+	)
+
+	var count := roundi(
+		surface_obstacles_per_chunk
+		* density
+		* chunk.terrain_density_multiplier
+	)
+
+	count = clampi(
+		count,
+		0,
+		maximum_obstacles_per_chunk
+	)
+
+	for i in range(count):
+		var scene := pool[
+			rng.randi_range(
+				0,
+				pool.size() - 1
+			)
+		]
+
+		var obstacle := scene.instantiate()
+
+		parent.add_child(obstacle)
+
+		obstacle.position = (
+			_random_chunk_position()
+		)
+
+
+### FISH
+
+func _generate_chunk_fish(
+	chunk: LakeChunk,
+	parent: Node2D,
+	start_depth: float,
+	end_depth: float
+) -> void:
+
+	if chunk.fish_mode == LakeChunk.SpawnMode.NONE:
+		return
+
+	var count := roundi(
+		surface_fish_per_chunk
+		* chunk.fish_density_multiplier
+		* rng.randf_range(0.85, 1.15)
+	)
+
+	for i in range(count):
+
+		var spawn_depth := rng.randf_range(
+			start_depth,
+			end_depth
+		)
+
+		var fish_scene: PackedScene
+
+		if (
+			chunk.fish_mode
+			== LakeChunk.SpawnMode.OVERRIDE
+		):
+			if chunk.fish_override.is_empty():
+				continue
+
+			fish_scene = chunk.fish_override[
+				rng.randi_range(
+					0,
+					chunk.fish_override.size() - 1
+				)
+			]
+
+		else:
+			fish_scene = (
+				_choose_fish_for_depth(
+					fish_scenes,
+					spawn_depth
+				)
+			)
+
+		if fish_scene == null:
+			continue
+
+		var fish := fish_scene.instantiate()
+
+		parent.add_child(fish)
+
+		fish.position = (
+			_random_chunk_position()
+		)
+
+
+func _choose_fish_for_depth(
+	pool: Array[PackedScene],
+	actual_depth: float
+) -> PackedScene:
+
+	if pool.is_empty():
+		return null
+
 	var effective_depth := (
-		actual_depth * bait_depth_modifier
+		actual_depth
+		* bait_depth_modifier
 	)
 
 	var weights := PackedFloat32Array()
 
-	for i in range(fish_scenes.size()):
-		var corruption := fish_corruptions[i]
+	for fish_scene in pool:
+		var corruption := (
+			_get_fish_corruption(
+				fish_scene
+			)
+		)
 
 		var preferred_depth := (
 			shallow_preferred_depth
-			+ corruption * corruption_depth_step
+			+ corruption
+			* corruption_depth_step
 		)
 
 		var distance := (
-			effective_depth - preferred_depth
+			effective_depth
+			- preferred_depth
 		)
 
-		# Bell curve centred around preferred_depth.
 		var weight := exp(
 			-0.5
 			* pow(
@@ -177,107 +466,129 @@ func _choose_fish_for_depth() -> PackedScene:
 			)
 		)
 
-		# Extremely unlikely is fine.
-		# Literally impossible is less interesting.
-		weight = max(weight, 0.001)
+		weights.append(
+			max(weight, 0.001)
+		)
 
-		weights.append(weight)
+	var chosen := rng.rand_weighted(weights)
 
-	var chosen_index := rng.rand_weighted(weights)
-
-	if chosen_index < 0:
-		return null
-
-	return fish_scenes[chosen_index]
+	return pool[chosen]
 
 
-### OBSTACLE SPAWNING
+### POSITIONS
 
-func _spawn_obstacle() -> void:
-	if obstacle_scenes.is_empty():
-		return
-
-	var index := rng.randi_range(
-		0,
-		obstacle_scenes.size() - 1
+func _random_chunk_position() -> Vector2:
+	var screen_width := (
+		get_viewport_rect().size.x
 	)
 
-	var obstacle := (
-		obstacle_scenes[index].instantiate()
-	)
+	return Vector2(
+		rng.randf_range(
+			horizontal_margin,
+			screen_width
+				- horizontal_margin
+		),
 
-	generated.add_child(obstacle)
-
-	obstacle.position = _get_spawn_position()
-
-
-func _get_obstacle_interval() -> float:
-	var depth := get_depth()
-
-	var density_multiplier := (
-		1.0
-		+ depth * obstacle_density_per_meter
-	)
-
-	return max(
-		minimum_obstacle_interval,
-		surface_obstacle_interval
-			/ density_multiplier
+		rng.randf_range(
+			30.0,
+			chunk_height - 30.0
+		)
 	)
 
 
-### SPAWN POSITION
+### FISH METADATA
 
-func _get_spawn_position() -> Vector2:
-	var screen_size := get_viewport_rect().size
+func _get_fish_corruption(
+	fish_scene: PackedScene
+) -> int:
 
-	var x := rng.randf_range(
-		horizontal_margin,
-		screen_size.x - horizontal_margin
+	if fish_corruption_cache.has(
+		fish_scene
+	):
+		return fish_corruption_cache[
+			fish_scene
+		]
+
+	var instance := (
+		fish_scene.instantiate()
 	)
 
-	# World moves upward, so convert the bottom of
-	# the viewport back into World-local coordinates.
-	var y := (
-		-position.y
-		+ screen_size.y
-		+ spawn_buffer
-	)
+	var corruption := 0
 
-	return Vector2(x, y)
+	if instance is Fish:
+		corruption = instance.corruption
+	else:
+		push_warning(
+			fish_scene.resource_path
+			+ " is not a Fish."
+		)
+
+	instance.free()
+
+	fish_corruption_cache[
+		fish_scene
+	] = corruption
+
+	return corruption
 
 
-### FISH METADATA CACHE
+### CHUNK METADATA CACHE
 
-func _cache_fish_corruptions() -> void:
-	fish_corruptions.clear()
+func _cache_chunk_metadata() -> void:
+	chunk_metadata.clear()
 
-	for fish_scene in fish_scenes:
-		var instance := fish_scene.instantiate()
+	for scene in chunk_scenes:
+		var instance := (
+			scene.instantiate()
+		)
 
-		if instance is Fish:
-			fish_corruptions.append(
-				instance.corruption
-			)
-		else:
+		if instance is not LakeChunk:
 			push_warning(
-				fish_scene.resource_path
-				+ " is not a Fish scene."
+				scene.resource_path
+				+ " is not a LakeChunk."
 			)
 
-			fish_corruptions.append(0)
+			instance.free()
+			continue
+
+		var chunk := instance as LakeChunk
+
+		chunk_metadata.append({
+			"scene": scene,
+			"path": scene.resource_path,
+
+			"selection_weight":
+				chunk.selection_weight,
+
+			"can_spawn_randomly":
+				chunk.can_spawn_randomly,
+
+			"minimum_depth":
+				chunk.minimum_depth,
+
+			"maximum_depth":
+				chunk.maximum_depth,
+
+			"guaranteed_depth":
+				chunk.guaranteed_depth
+		})
 
 		instance.free()
 
 
 ### CLEANUP
 
-func _cleanup_generated() -> void:
-	for child in generated.get_children():
+func _cleanup_chunks() -> void:
+	for child in chunks.get_children():
+
 		if child is not Node2D:
 			continue
 
-		if child.global_position.y < -cleanup_buffer:
+		if (
+			child.global_position.y
+			+ chunk_height
+			< -cleanup_buffer
+		):
 			child.queue_free()
 
 

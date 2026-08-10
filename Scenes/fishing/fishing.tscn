@@ -24,7 +24,7 @@ script = ExtResource("3_nwjj7")
 fish_scenes = Array[PackedScene]([ExtResource("3_hit5c"), ExtResource("4_46q8q")])
 obstacle_scenes = Array[PackedScene]([ExtResource("5_qsnlf")])
 
-[node name="Generated" type="Node2D" parent="World" unique_id=1732409872]
+[node name="Chunks" type="Node2D" parent="World" unique_id=1732409872]
 
 [node name="Hook" type="CharacterBody2D" parent="." unique_id=1342734860]
 position = Vector2(641, 347.00003)
