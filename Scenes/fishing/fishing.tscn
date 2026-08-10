@@ -29,6 +29,8 @@ obstacle_scenes = Array[PackedScene]([ExtResource("5_qsnlf")])
 [node name="Hook" type="CharacterBody2D" parent="." unique_id=1342734860]
 position = Vector2(641, 347.00003)
 scale = Vector2(33.5, 39.5)
+collision_layer = 4
+collision_mask = 2
 script = ExtResource("1_et7wu")
 
 [node name="Polygon2D" type="Polygon2D" parent="Hook" unique_id=713463828]
@@ -41,6 +43,7 @@ scale = Vector2(1, 0.9999999)
 shape = SubResource("CircleShape2D_qsnlf")
 
 [node name="CatchArea" type="Area2D" parent="Hook" unique_id=1227494707]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hook/CatchArea" unique_id=1021886728]
 position = Vector2(-0.23880959, 1.3924046)

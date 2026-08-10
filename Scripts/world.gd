@@ -89,7 +89,7 @@ func _ready() -> void:
 	obstacle_timer = surface_obstacle_interval
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if scrolling:
 		position.y -= scroll_speed * delta
 

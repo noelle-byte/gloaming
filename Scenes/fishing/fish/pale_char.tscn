@@ -6,6 +6,7 @@
 size = Vector2(51, 24)
 
 [node name="Fish2" type="Area2D" unique_id=1363872635 groups=["fish"]]
+collision_mask = 0
 script = ExtResource("1_osrwx")
 swim_speed = 60.0
 display_name = "Pale Char"

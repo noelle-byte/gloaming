@@ -18,7 +18,18 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	position.x += swim_speed * swim_direction * delta
+	var movement := Vector2(
+		swim_speed * swim_direction * delta,
+		0.0
+	)
+
+	var target_position := global_position + movement
+
+	if would_hit_obstacle(target_position):
+		swim_direction *= -1.0
+		_update_facing()
+	else:
+		position += movement
 
 	var screen_width := get_viewport_rect().size.x
 
@@ -26,7 +37,10 @@ func _process(delta: float) -> void:
 		swim_direction = 1.0
 		_update_facing()
 
-	elif global_position.x >= screen_width - 30.0 and swim_direction > 0.0:
+	elif (
+		global_position.x >= screen_width - 30.0
+		and swim_direction > 0.0
+	):
 		swim_direction = -1.0
 		_update_facing()
 
