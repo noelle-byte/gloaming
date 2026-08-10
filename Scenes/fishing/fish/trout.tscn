@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b0flphmjxa2ym"]
 
-[ext_resource type="Script" uid="uid://bbln2ibwfuqkw" path="res://Scripts/fish.gd" id="1_xilux"]
+[ext_resource type="Script" uid="uid://sr42qfkltglh" path="res://Scripts/normal_fish.gd" id="1_xilux"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwjj7"]
 size = Vector2(51, 24)
