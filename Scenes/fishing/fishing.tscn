@@ -26,6 +26,8 @@ color = Color(0.006175897, 0.13546506, 0.521067, 1)
 [node name="World" type="Node2D" parent="." unique_id=1722049636]
 script = ExtResource("3_nwjj7")
 
+[node name="Generated" type="Node2D" parent="World" unique_id=1732409872]
+
 [node name="Fish1" type="Area2D" parent="World" unique_id=1163218952 groups=["fish"]]
 position = Vector2(895, 783)
 script = ExtResource("3_spj15")
