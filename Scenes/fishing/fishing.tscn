@@ -21,8 +21,10 @@ color = Color(0.006175897, 0.13546506, 0.521067, 1)
 
 [node name="World" type="Node2D" parent="." unique_id=1722049636]
 script = ExtResource("3_nwjj7")
+scroll_speed = 100.0
 fish_scenes = Array[PackedScene]([ExtResource("3_hit5c"), ExtResource("4_46q8q")])
 obstacle_scenes = Array[PackedScene]([ExtResource("5_qsnlf")])
+corruption_depth_step = 15.0
 
 [node name="Chunks" type="Node2D" parent="World" unique_id=1732409872]
 

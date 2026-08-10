@@ -1,3 +1,8 @@
 [gd_scene format=3 uid="uid://dmla5gib1rpjb"]
 
+[ext_resource type="Script" uid="uid://bqoa741kyf1rn" path="res://Scripts/lake_chunk.gd" id="1_ffdey"]
+
 [node name="DefaultChunk" type="Node2D" unique_id=968292290]
+script = ExtResource("1_ffdey")
+
+[node name="Generated" type="Node2D" parent="." unique_id=1990253148]
