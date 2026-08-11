@@ -19,7 +19,8 @@ func on_caught() -> void:
 
 
 func would_hit_obstacle(
-	target_global_position: Vector2
+	target_global_position: Vector2,
+	margin: float = 0.0
 ) -> bool:
 
 	var collision_shape := (
@@ -36,12 +37,8 @@ func would_hit_obstacle(
 	var query := PhysicsShapeQueryParameters2D.new()
 
 	query.shape = collision_shape.shape
-
-	# Start with the fish collider where it currently is.
 	query.transform = collision_shape.global_transform
 
-	# Move our hypothetical collider to where the fish
-	# is trying to swim.
 	var movement := (
 		target_global_position
 		- global_position
@@ -54,6 +51,10 @@ func would_hit_obstacle(
 
 	query.collide_with_bodies = true
 	query.collide_with_areas = false
+
+	# Allows generation to keep fish a few pixels
+	# away from rock surfaces.
+	query.margin = margin
 
 	var hits := (
 		get_world_2d()

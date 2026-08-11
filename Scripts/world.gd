@@ -13,6 +13,9 @@ var scroll_distance: float = 0.0
 
 @onready var camera: Camera2D = $Camera2D
 
+@export var fish_spawn_attempts: int = 20
+@export var fish_spawn_clearance: float = 8.0
+
 ### CHUNKS
 
 @export_category("Chunks")
@@ -283,7 +286,7 @@ func _populate_chunk(
 		chunk.get_generated_parent()
 	)
 
-	# Obstacles first.
+	# Generate terrain first.
 	_generate_chunk_terrain(
 		chunk,
 		spawn_parent,
@@ -291,14 +294,36 @@ func _populate_chunk(
 		end_depth
 	)
 
-	# Then fish.
-	_generate_chunk_fish(
+	# Fish are generated after the terrain has entered
+	# the physics world.
+	_generate_fish_after_physics(
 		chunk,
 		spawn_parent,
 		start_depth,
 		end_depth
 	)
+	
+func _generate_fish_after_physics(
+	chunk: LakeChunk,
+	parent: Node2D,
+	start_depth: float,
+	end_depth: float
+) -> void:
 
+	await get_tree().physics_frame
+
+	if not is_instance_valid(chunk):
+		return
+
+	if not is_instance_valid(parent):
+		return
+
+	_generate_chunk_fish(
+		chunk,
+		parent,
+		start_depth,
+		end_depth
+	)
 
 ### TERRAIN
 
@@ -416,13 +441,31 @@ func _generate_chunk_fish(
 		if fish_scene == null:
 			continue
 
-		var fish := fish_scene.instantiate()
+		var fish := fish_scene.instantiate() as Fish
+
+		if fish == null:
+			continue
 
 		parent.add_child(fish)
 
-		fish.position = (
-			_random_chunk_position()
-		)
+		var found_safe_position := false
+
+		for attempt in range(fish_spawn_attempts):
+
+			fish.position = _random_chunk_position()
+
+			if not fish.would_hit_obstacle(
+				fish.global_position,
+				fish_spawn_clearance
+			):
+				found_safe_position = true
+				break
+
+
+		if not found_safe_position:
+			# This chunk is simply too crowded to fit
+			# another fish safely.
+			fish.queue_free()
 
 
 func _choose_fish_for_depth(
