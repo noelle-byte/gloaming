@@ -103,6 +103,34 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "THROW BACK"
 
+[node name="CatchPannel" type="Control" parent="UILayer/UI" unique_id=121745707]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BaitPanel" type="Control" parent="UILayer/UI" unique_id=195763855]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Title" type="Label" parent="UILayer/UI/BaitPanel" unique_id=1411234038]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="BaitButtons" type="VBoxContainer" parent="UILayer/UI/BaitPanel" unique_id=1793703405]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LeaveLakeButton" type="Button" parent="UILayer/UI/BaitPanel" unique_id=858248428]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
 [node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=495015650]
 layer = -1
 

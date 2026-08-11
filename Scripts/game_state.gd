@@ -226,3 +226,22 @@ func sell_all_catches() -> int:
 	catches.clear()
 
 	return total
+
+func owns_rod(rod_id: String) -> bool:
+	return rod_id in owned_rods
+
+
+func add_rod(rod_id: String) -> bool:
+	if owns_rod(rod_id):
+		return false
+
+	owned_rods.append(rod_id)
+	return true
+
+
+func equip_rod(rod_id: String) -> bool:
+	if not owns_rod(rod_id):
+		return false
+
+	equipped_rod = rod_id
+	return true
