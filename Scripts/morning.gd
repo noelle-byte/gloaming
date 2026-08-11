@@ -4,26 +4,46 @@ var dialogue_index := 0
 
 var dialogue := [
 	{
-		"speaker": "Marta",
-		"text": "You're awake."
+		"speaker": "Elina",
+		"text": "You're up."
 	},
 	{
-		"speaker": "Marta",
-		"text": "There's enough food left for today."
+		"speaker": "Elina",
+		"text": "Anni left your gloves by the stove. She says the left one was still wet."
 	},
 	{
-		"speaker": "Marta",
-		"text": "But Tomas is getting worse."
+		"speaker": "Juhani",
+		"text": "She checks my gear now?"
 	},
 	{
-		"speaker": "Marta",
-		"text": "The doctor says the medicine will cost twelve pounds."
+		"speaker": "Elina",
+		"text": "Apparently I have competition."
+	},
+	{
+		"speaker": "Elina",
+		"text": "There's enough in the cupboard for today. Voss comes in three days."
+	},
+	{
+		"speaker": "Juhani",
+		"text": "I'll bring something back."
+	},
+	{
+		"speaker": "Elina",
+		"text": "Before dark?"
+	},
+	{
+		"speaker": "Juhani",
+		"text": "Before night."
+	},
+	{
+		"speaker": "Elina",
+		"text": "That isn't what I asked Juhani."
 	}
 ]
 
-@onready var speaker_label: Label = %Speaker
-@onready var dialogue_label: Label = %Dialogue
-@onready var continue_button: Button = %Continue
+@onready var speaker_label: Label = %SpeakerLabel
+@onready var dialogue_label: Label = %DialogueLabel
+@onready var continue_button: Button = %ContinueButton
 
 
 func _ready() -> void:

@@ -2,70 +2,87 @@
 
 [ext_resource type="Script" uid="uid://4v58dmom4w1c" path="res://Scripts/morning.gd" id="1_b3njg"]
 [ext_resource type="Script" uid="uid://bo8e0361crxg4" path="res://Scripts/day_label.gd" id="2_47tcd"]
-
-[sub_resource type="Gradient" id="Gradient_47tcd"]
-colors = PackedColorArray(0.5282587, 0.057558432, 0.7950316, 1, 0.5294118, 0.05882353, 0.79607844, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_wxofe"]
-gradient = SubResource("Gradient_47tcd")
+[ext_resource type="Texture2D" uid="uid://b4stisaym8vye" path="res://art/placeholders/home placeholder.png" id="2_apg1w"]
+[ext_resource type="Texture2D" uid="uid://b6kdxahthfg6h" path="res://art/placeholders/elina portrait placeholder.png" id="3_rlom8"]
 
 [node name="Morning" type="Control" unique_id=2002616809]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_b3njg")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1218316854]
+[node name="Background" type="TextureRect" parent="." unique_id=353884113]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 1113.0
-offset_bottom = 608.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture1D_wxofe")
+texture = ExtResource("2_apg1w")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Protrait" type="TextureRect" parent="." unique_id=1709701414]
+[node name="Shade" type="ColorRect" parent="." unique_id=783750663]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.1254902)
+
+[node name="ElinaPortrait" type="TextureRect" parent="." unique_id=1457703174]
 layout_mode = 0
-offset_left = 78.0
-offset_top = 116.0
-offset_right = 343.0
-offset_bottom = 478.0
+offset_left = 730.0
+offset_top = 65.0
+offset_right = 1100.0
+offset_bottom = 595.0
+texture = ExtResource("3_rlom8")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
 
-[node name="DialoguePannel" type="PanelContainer" parent="." unique_id=1153004945]
+[node name="DialoguePanel" type="PanelContainer" parent="." unique_id=2015425817]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 480.0
-offset_right = 1136.0
-offset_bottom = 636.0
+offset_left = 35.0
+offset_top = 520.0
+offset_right = 1245.0
+offset_bottom = 690.0
 
-[node name="MarginContainer" type="MarginContainer" parent="DialoguePannel" unique_id=2039550141]
+[node name="DialogueMargin" type="MarginContainer" parent="DialoguePanel" unique_id=278863260]
 layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DialoguePannel/MarginContainer" unique_id=1396765544]
+[node name="DialogueVBox" type="VBoxContainer" parent="DialoguePanel/DialogueMargin" unique_id=1376407464]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Speaker" type="Label" parent="DialoguePannel/MarginContainer/VBoxContainer" unique_id=1218816902]
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=601455642]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Dialogue" type="Label" parent="DialoguePannel/MarginContainer/VBoxContainer" unique_id=1400030838]
+[node name="DialogueLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=590173473]
 unique_name_in_owner = true
 layout_mode = 2
-text = "test text"
-autowrap_mode = 2
+autowrap_mode = 3
 
-[node name="Continue" type="Button" parent="DialoguePannel/MarginContainer/VBoxContainer" unique_id=728440732]
-unique_name_in_owner = true
+[node name="ContinueButton" type="Button" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=1566720938]
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "continue"
 
 [node name="DayLabel" type="Label" parent="." unique_id=493728219]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 910.0
-offset_top = 73.0
-offset_right = 1070.0
-offset_bottom = 117.0
+offset_left = 24.0
+offset_top = 31.0
+offset_right = 184.0
+offset_bottom = 75.0
 script = ExtResource("2_47tcd")

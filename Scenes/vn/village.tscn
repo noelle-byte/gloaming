@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://csoylrlaae1j8"]
 
+[ext_resource type="Script" uid="uid://bgl46q7icuok1" path="res://Scripts/visit_marek.gd" id="1_ew0vs"]
 [ext_resource type="Script" uid="uid://ba46vkj10mmot" path="res://Scripts/prepare.gd" id="1_wh0xy"]
 
 [node name="Village" type="Control" unique_id=139495779]
@@ -18,13 +19,23 @@ offset_right = 433.0
 offset_bottom = 200.0
 text = "MIDDAY - VILLAGE"
 
-[node name="PrepareForFishing" type="Button" parent="." unique_id=525934813]
+[node name="VisitMarek" type="Button" parent="." unique_id=486106238]
 layout_mode = 0
 offset_left = 528.0
 offset_top = 288.0
-offset_right = 657.0
+offset_right = 680.0
 offset_bottom = 359.0
+text = "Visit Marek"
+script = ExtResource("1_ew0vs")
+
+[node name="PrepareForFishing" type="Button" parent="." unique_id=525934813]
+layout_mode = 0
+offset_left = 529.0
+offset_top = 364.0
+offset_right = 681.0
+offset_bottom = 435.0
 text = "prepare for fishing"
 script = ExtResource("1_wh0xy")
 
+[connection signal="pressed" from="VisitMarek" to="VisitMarek" method="_on_pressed"]
 [connection signal="pressed" from="PrepareForFishing" to="PrepareForFishing" method="_on_pressed"]
