@@ -2,6 +2,7 @@ class_name NormalFish
 extends Fish
 
 @export var swim_speed: float = 90.0
+@onready var visual: Node2D = $Visual
 
 var swim_direction: float
 
@@ -46,4 +47,8 @@ func _process(delta: float) -> void:
 
 
 func _update_facing() -> void:
-	$Polygon2D.scale.x = swim_direction
+	# Current placeholder artwork faces left by default.
+	if swim_direction < 0.0:
+		visual.scale.x = 1.0
+	else:
+		visual.scale.x = -1.0
