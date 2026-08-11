@@ -9,6 +9,9 @@ extends Node2D
 
 @export var pixels_per_meter: float = 50.0
 
+var scroll_distance: float = 0.0
+
+@onready var camera: Camera2D = $Camera2D
 
 ### CHUNKS
 
@@ -98,7 +101,10 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if scrolling:
-		position.y -= scroll_speed * delta
+		var movement := scroll_speed * delta
+
+		scroll_distance += movement
+		camera.position.y += movement
 
 		_ensure_chunks()
 
@@ -108,10 +114,7 @@ func _physics_process(delta: float) -> void:
 ### DEPTH
 
 func get_depth() -> float:
-	return max(
-		0.0,
-		-position.y / pixels_per_meter
-	)
+	return scroll_distance / pixels_per_meter
 
 
 ### CHUNK GENERATION
@@ -119,11 +122,9 @@ func get_depth() -> float:
 func _ensure_chunks() -> void:
 	var screen_height := get_viewport_rect().size.y
 
-	# Where the bottom of the viewport currently is
-	# in World-local coordinates.
 	var viewport_bottom := (
-		-position.y
-		+ screen_height
+		camera.position.y
+		+ screen_height * 0.5
 	)
 
 	var generation_limit := (
@@ -138,7 +139,6 @@ func _ensure_chunks() -> void:
 		_spawn_chunk(next_chunk_index)
 
 		next_chunk_index += 1
-
 
 func _spawn_chunk(chunk_index: int) -> void:
 	if chunk_scenes.is_empty():
@@ -579,24 +579,21 @@ func _cache_chunk_metadata() -> void:
 ### CLEANUP
 
 func _cleanup_chunks() -> void:
+	var screen_height := get_viewport_rect().size.y
+
+	var viewport_top := (
+		camera.position.y
+		- screen_height * 0.5
+	)
+
 	for child in chunks.get_children():
 
 		if child is not Node2D:
 			continue
 
 		if (
-			child.global_position.y
+			child.position.y
 			+ chunk_height
-			< -cleanup_buffer
+			< viewport_top - cleanup_buffer
 		):
 			child.queue_free()
-
-
-### SCROLL CONTROL
-
-func stop_scrolling() -> void:
-	scrolling = false
-
-
-func start_scrolling() -> void:
-	scrolling = true

@@ -12,6 +12,9 @@ var failed := false
 
 @onready var catch_area: Area2D = $CatchArea
 
+@export var descent_speed: float = 100.0
+
+@onready var camera: Camera2D = $"../World/Camera2D"
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -34,7 +37,10 @@ func _physics_process(_delta: float) -> void:
 		"ui_down"
 	)
 
-	velocity = direction * speed
+	velocity = (
+		direction * speed
+		+ Vector2.DOWN * descent_speed
+	)
 
 	move_and_slide()
 
@@ -47,6 +53,14 @@ func _physics_process(_delta: float) -> void:
 
 
 func _check_rock_collisions() -> void:
+	var screen_height := get_viewport_rect().size.y
+
+	var top_edge := (
+		camera.get_screen_center_position().y
+		- screen_height * 0.5
+		+ screen_margin
+	)
+
 	for i in range(get_slide_collision_count()):
 		var collision := get_slide_collision(i)
 		var collider := collision.get_collider()
@@ -57,29 +71,54 @@ func _check_rock_collisions() -> void:
 		if not collider.is_in_group("obstacle"):
 			continue
 
-		# A rock has pushed us upward against the
-		# upper edge of the fishing area.
 		if (
-			global_position.y <= screen_margin + 2.0
+			global_position.y <= top_edge + 2.0
 			and collision.get_normal().y < -0.5
 		):
-			_fail_cast("Hook pinned against the ice")
+			_fail_cast("Hook caught on a rock")
 			return
 
 
 func _keep_on_screen() -> void:
 	var screen_size := get_viewport_rect().size
+	var half_screen := screen_size * 0.5
+
+	var camera_center := camera.get_screen_center_position()
+
+	var left := (
+		camera_center.x
+		- half_screen.x
+		+ screen_margin
+	)
+
+	var right := (
+		camera_center.x
+		+ half_screen.x
+		- screen_margin
+	)
+
+	var top := (
+		camera_center.y
+		- half_screen.y
+		+ screen_margin
+	)
+
+	var bottom := (
+		camera_center.y
+		+ half_screen.y
+		- screen_margin
+	)
 
 	global_position.x = clamp(
 		global_position.x,
-		screen_margin,
-		screen_size.x - screen_margin
+		left,
+		right
 	)
 
 	global_position.y = clamp(
 		global_position.y,
-		screen_margin,
-		screen_size.y - screen_margin
+		top,
+		bottom
 	)
 
 

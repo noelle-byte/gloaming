@@ -3,7 +3,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_spj15"]
 size = Vector2(194.5, 101)
 
-[node name="Rock1" type="AnimatableBody2D" unique_id=745755610 groups=["obstacle"]]
+[node name="Rock1" type="StaticBody2D" unique_id=7961896 groups=["obstacle"]]
 collision_layer = 2
 collision_mask = 4
 
