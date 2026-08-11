@@ -58,21 +58,23 @@ func _create_bait_row(bait_id: String) -> void:
 	var row := HBoxContainer.new()
 	item_list.add_child(row)
 
-	var label := Label.new()
-
-	label.text = "%s    %d mk    Owned: %d" % [
+	var name_label := Label.new()
+	name_label.text = "%s ×%d" % [
 		bait.get("name", bait_id),
-		price,
 		owned
 	]
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(name_label)
 
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-
-	row.add_child(label)
+	var price_label := Label.new()
+	price_label.text = "%d mk" % price
+	price_label.custom_minimum_size.x = 55
+	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.add_child(price_label)
 
 	var buy_button := Button.new()
 	buy_button.text = "Buy"
-
+	buy_button.custom_minimum_size.x = 70
 	buy_button.disabled = not GameState.can_afford(price)
 
 	buy_button.pressed.connect(
@@ -92,14 +94,16 @@ func _create_rod_row(rod_id: String) -> void:
 
 	var label := Label.new()
 
-	label.text = "%s    %d mk" % [
-		rod.get("name", rod_id),
-		price
-	]
+	var name_label := Label.new()
+	name_label.text = rod.get("name", rod_id)
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(name_label)
 
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-
-	row.add_child(label)
+	var price_label := Label.new()
+	price_label.text = "%d mk" % price
+	price_label.custom_minimum_size.x = 55
+	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.add_child(price_label)
 
 	var buy_button := Button.new()
 

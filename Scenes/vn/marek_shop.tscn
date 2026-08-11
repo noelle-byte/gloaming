@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b6uxdxmg60ubi"]
 
 [ext_resource type="Texture2D" uid="uid://bpogf7wvvfkyg" path="res://art/placeholders/marek shop placeholder.png" id="1_d1x0t"]
+[ext_resource type="Script" uid="uid://bnx08025v7ch1" path="res://Scripts/marek_shop.gd" id="1_xo0im"]
 [ext_resource type="Texture2D" uid="uid://buiwfmqbmh6p4" path="res://art/placeholders/marek portrait placeholder.png" id="2_xo0im"]
 
 [node name="MarekShop" type="Control" unique_id=626284316]
@@ -10,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_xo0im")
 
 [node name="Background" type="TextureRect" parent="." unique_id=862394405]
 layout_mode = 1
@@ -22,6 +24,15 @@ texture = ExtResource("1_d1x0t")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="Shade" type="ColorRect" parent="." unique_id=2056144525]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.1254902)
+
 [node name="MarekPortrait" type="TextureRect" parent="." unique_id=1780839662]
 layout_mode = 0
 offset_left = 40.0
@@ -31,15 +42,6 @@ offset_bottom = 600.0
 texture = ExtResource("2_xo0im")
 expand_mode = 1
 stretch_mode = 5
-
-[node name="Shade" type="ColorRect" parent="." unique_id=2056144525]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.1254902)
 
 [node name="ShopPanel" type="PanelContainer" parent="." unique_id=2053279899]
 layout_mode = 0
@@ -64,12 +66,12 @@ layout_mode = 2
 
 [node name="ShopTitle" type="Label" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1011651875]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Marek's Fishing Supplies"
 
 [node name="MoneyLabel" type="Label" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1859921259]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="HSeparator" type="HSeparator" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=1398242136]
 layout_mode = 2
@@ -81,10 +83,12 @@ size_flags_vertical = 3
 [node name="ItemList" type="VBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ItemScroll" unique_id=944400943]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="LeaveButton" type="Button" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=124830320]
 unique_name_in_owner = true
 layout_mode = 2
+text = "leave"
 
 [node name="DialoguePanel" type="PanelContainer" parent="." unique_id=1892906981]
 layout_mode = 0
@@ -111,3 +115,4 @@ layout_mode = 2
 [node name="DialogueLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=1046315729]
 unique_name_in_owner = true
 layout_mode = 2
+autowrap_mode = 3
