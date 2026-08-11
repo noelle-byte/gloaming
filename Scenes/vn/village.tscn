@@ -18,13 +18,13 @@ offset_right = 433.0
 offset_bottom = 200.0
 text = "MIDDAY - VILLAGE"
 
-[node name="GoFishing" type="Button" parent="." unique_id=525934813]
+[node name="PrepareForFishing" type="Button" parent="." unique_id=525934813]
 layout_mode = 0
 offset_left = 528.0
 offset_top = 288.0
 offset_right = 657.0
 offset_bottom = 359.0
-text = "go fishing"
+text = "prepare for fishing"
 script = ExtResource("1_wh0xy")
 
-[connection signal="pressed" from="GoFishing" to="GoFishing" method="_on_pressed"]
+[connection signal="pressed" from="PrepareForFishing" to="PrepareForFishing" method="_on_pressed"]

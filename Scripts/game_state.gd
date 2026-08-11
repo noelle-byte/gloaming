@@ -4,7 +4,7 @@ extends Node
 
 var day: int = 1
 
-# Give ourselves some test money for now.
+# Test money
 var money: int = 20
 
 var quota: int = 25

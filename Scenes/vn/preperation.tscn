@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://c38sfvxw8xnn5"]
+
+[node name="Preparation" type="Control" unique_id=384526187]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=717429657]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2083839154]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=699889960]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 210.0
+offset_top = 149.0
+offset_right = 799.0
+offset_bottom = 507.0
+
+[node name="Title" type="Label" parent="MarginContainer" unique_id=515303271]
+layout_mode = 2
+text = "PREPARE FOR THE GLOAMING"
+
+[node name="MoneyLabel" type="Label" parent="MarginContainer" unique_id=1988060992]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CapacityLabel" type="Label" parent="MarginContainer" unique_id=1369223127]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer" unique_id=1476965511]
+layout_mode = 2
+
+[node name="BaitList" type="VBoxContainer" parent="MarginContainer" unique_id=385796606]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer" unique_id=987145069]
+layout_mode = 2
+
+[node name="HintLabel" type="Label" parent="MarginContainer" unique_id=993668296]
+layout_mode = 2
+text = "Choose what bait to take onto the lake"
+
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer" unique_id=2007941963]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="MarginContainer/Buttons" unique_id=778696826]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="GoFishingButton" type="Button" parent="MarginContainer/Buttons" unique_id=369944773]
+unique_name_in_owner = true
+layout_mode = 2
