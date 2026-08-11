@@ -46,4 +46,4 @@ func _process(delta: float) -> void:
 
 
 func _update_facing() -> void:
-	scale.x = -swim_direction
+	$Polygon2D.scale.x = swim_direction
