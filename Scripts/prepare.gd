@@ -2,5 +2,5 @@ extends Control
 
 func _on_pressed() -> void:
 	get_tree().change_scene_to_file(
-		"res://Scenes/vn/preperation.tscn"
+		"res://Scenes/vn/preparation.tscn"
 	)
