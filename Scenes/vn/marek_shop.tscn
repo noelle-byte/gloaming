@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://b6uxdxmg60ubi"]
 
+[ext_resource type="Texture2D" uid="uid://bpogf7wvvfkyg" path="res://art/placeholders/marek shop placeholder.png" id="1_d1x0t"]
+[ext_resource type="Texture2D" uid="uid://buiwfmqbmh6p4" path="res://art/placeholders/marek portrait placeholder.png" id="2_xo0im"]
+
 [node name="MarekShop" type="Control" unique_id=626284316]
 layout_mode = 3
 anchors_preset = 15
@@ -9,58 +12,102 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="TextureRect" parent="." unique_id=862394405]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_d1x0t")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="MarekPortrait" type="TextureRect" parent="." unique_id=1780839662]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 40.0
+offset_top = 70.0
+offset_right = 410.0
+offset_bottom = 600.0
+texture = ExtResource("2_xo0im")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="Darken" type="ColorRect" parent="." unique_id=2056144525]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="DialoguePanel" type="PanelContainer" parent="." unique_id=1892906981]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="MarginContainer" type="MarginContainer" parent="DialoguePanel" unique_id=1047923242]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="DialoguePanel/MarginContainer" unique_id=1843732670]
-layout_mode = 2
-
-[node name="SpeakerLabel" type="Label" parent="DialoguePanel/MarginContainer/VBoxContainer" unique_id=1945230840]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="DialogueLabel" type="Label" parent="DialoguePanel/MarginContainer/VBoxContainer" unique_id=1046315729]
-unique_name_in_owner = true
-layout_mode = 2
+[node name="Shade" type="ColorRect" parent="." unique_id=2056144525]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.1254902)
 
 [node name="ShopPanel" type="PanelContainer" parent="." unique_id=2053279899]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 760.0
+offset_top = 35.0
+offset_right = 1240.0
+offset_bottom = 510.0
 
-[node name="MarginContainer" type="MarginContainer" parent="ShopPanel" unique_id=1728967075]
+[node name="ShopMargin" type="MarginContainer" parent="ShopPanel" unique_id=1728967075]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 18
+
+[node name="ShopVBox" type="VBoxContainer" parent="ShopPanel/ShopMargin" unique_id=1683697688]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShopHeader" type="HBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=1870321483]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ShopPanel/MarginContainer" unique_id=1683697688]
+[node name="ShopTitle" type="Label" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1011651875]
+layout_mode = 2
+text = "Marek's Fishing Supplies"
+
+[node name="MoneyLabel" type="Label" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1859921259]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=1398242136]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ShopPanel/MarginContainer/VBoxContainer" unique_id=1859921259]
+[node name="ItemScroll" type="ScrollContainer" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=769427895]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemList" type="VBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ItemScroll" unique_id=944400943]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ItemList" type="ItemList" parent="ShopPanel/MarginContainer/VBoxContainer" unique_id=658132652]
+[node name="LeaveButton" type="Button" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=124830320]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Button" type="Button" parent="ShopPanel/MarginContainer/VBoxContainer" unique_id=124830320]
+[node name="DialoguePanel" type="PanelContainer" parent="." unique_id=1892906981]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 520.0
+offset_right = 1245.0
+offset_bottom = 690.0
+
+[node name="DialogueMargin" type="MarginContainer" parent="DialoguePanel" unique_id=1047923242]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="DialogueVBox" type="VBoxContainer" parent="DialoguePanel/DialogueMargin" unique_id=1843732670]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=1945230840]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DialogueLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=1046315729]
 unique_name_in_owner = true
 layout_mode = 2
