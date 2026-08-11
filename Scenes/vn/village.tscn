@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://csoylrlaae1j8"]
 
-[ext_resource type="Script" uid="uid://ba46vkj10mmot" path="res://Scripts/go_fishing.gd" id="1_wh0xy"]
+[ext_resource type="Script" uid="uid://ba46vkj10mmot" path="res://Scripts/prepare.gd" id="1_wh0xy"]
 
 [node name="Village" type="Control" unique_id=139495779]
 layout_mode = 3

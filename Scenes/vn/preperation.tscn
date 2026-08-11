@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://c38sfvxw8xnn5"]
 
+[ext_resource type="Script" uid="uid://b6104pprsjq84" path="res://Scripts/go_fishing_button.gd" id="1_eujah"]
+
 [node name="Preparation" type="Control" unique_id=384526187]
 layout_mode = 3
 anchors_preset = 15
@@ -8,57 +10,88 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=717429657]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=2083839154]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=699889960]
+[node name="Background" type="TextureRect" parent="." unique_id=717429657]
 layout_mode = 1
-anchors_preset = -1
-offset_left = 210.0
-offset_top = 149.0
-offset_right = 799.0
-offset_bottom = 507.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Title" type="Label" parent="MarginContainer" unique_id=515303271]
+[node name="Darken" type="ColorRect" parent="." unique_id=2083839154]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.09803922)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=60534422]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=303322534]
+custom_minimum_size = Vector2(750, 400)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=699889960]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1634269840]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=515303271]
 layout_mode = 2
 text = "PREPARE FOR THE GLOAMING"
 
-[node name="MoneyLabel" type="Label" parent="MarginContainer" unique_id=1988060992]
+[node name="MoneyLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1988060992]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CapacityLabel" type="Label" parent="MarginContainer" unique_id=1369223127]
+[node name="CapacityLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1369223127]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer" unique_id=1476965511]
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1476965511]
 layout_mode = 2
 
-[node name="BaitList" type="VBoxContainer" parent="MarginContainer" unique_id=385796606]
+[node name="BaitList" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=385796606]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer" unique_id=987145069]
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=987145069]
 layout_mode = 2
 
-[node name="HintLabel" type="Label" parent="MarginContainer" unique_id=993668296]
+[node name="HintLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=993668296]
 layout_mode = 2
 text = "Choose what bait to take onto the lake"
 
-[node name="Buttons" type="HBoxContainer" parent="MarginContainer" unique_id=2007941963]
+[node name="Buttons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2007941963]
 layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 2
 
-[node name="BackButton" type="Button" parent="MarginContainer/Buttons" unique_id=778696826]
+[node name="BackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=778696826]
 unique_name_in_owner = true
 layout_mode = 2
+text = "back"
 
-[node name="GoFishingButton" type="Button" parent="MarginContainer/Buttons" unique_id=369944773]
+[node name="GoFishingButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=369944773]
 unique_name_in_owner = true
 layout_mode = 2
+text = "go fishing"
+script = ExtResource("1_eujah")
+
+[connection signal="pressed" from="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/GoFishingButton" to="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/GoFishingButton" method="_on_pressed"]
