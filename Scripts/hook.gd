@@ -16,6 +16,11 @@ var failed := false
 
 @onready var camera: Camera2D = $"../World/Camera2D"
 
+@export_range(0.5, 1.0)
+var offscreen_fraction_to_fail: float = 0.9
+
+@onready var body_collision: CollisionShape2D = $CollisionShape2D
+
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
@@ -58,7 +63,21 @@ func _check_rock_collisions() -> void:
 	var top_edge := (
 		camera.get_screen_center_position().y
 		- screen_height * 0.5
-		+ screen_margin
+	)
+
+	var radius := 22.0
+
+	if body_collision.shape is CircleShape2D:
+		radius = (
+			body_collision.shape as CircleShape2D
+		).radius
+
+	# 0.9 means roughly 90% of the collider must
+	# have disappeared above the viewport.
+	var failure_y := (
+		top_edge
+		+ radius
+		* (1.0 - 2.0 * offscreen_fraction_to_fail)
 	)
 
 	for i in range(get_slide_collision_count()):
@@ -72,7 +91,7 @@ func _check_rock_collisions() -> void:
 			continue
 
 		if (
-			global_position.y <= top_edge + 2.0
+			global_position.y <= failure_y
 			and collision.get_normal().y < -0.5
 		):
 			_fail_cast("Hook caught on a rock")
@@ -97,12 +116,6 @@ func _keep_on_screen() -> void:
 		- screen_margin
 	)
 
-	var top := (
-		camera_center.y
-		- half_screen.y
-		+ screen_margin
-	)
-
 	var bottom := (
 		camera_center.y
 		+ half_screen.y
@@ -115,9 +128,10 @@ func _keep_on_screen() -> void:
 		right
 	)
 
-	global_position.y = clamp(
+	# Do NOT clamp against the top.
+	# A rock needs to be capable of pushing us offscreen.
+	global_position.y = min(
 		global_position.y,
-		top,
 		bottom
 	)
 

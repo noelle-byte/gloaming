@@ -597,3 +597,10 @@ func _cleanup_chunks() -> void:
 			< viewport_top - cleanup_buffer
 		):
 			child.queue_free()
+
+func stop_scrolling() -> void:
+	scrolling = false
+
+
+func start_scrolling() -> void:
+	scrolling = true

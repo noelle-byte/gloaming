@@ -16,12 +16,6 @@ radius = 22.0
 [node name="Fishing" type="Node2D" unique_id=1618200898]
 script = ExtResource("1_hiiat")
 
-[node name="Background" type="ColorRect" parent="." unique_id=88795416]
-z_index = -1
-offset_right = 1285.0
-offset_bottom = 730.0
-color = Color(0.006175897, 0.13546506, 0.521067, 1)
-
 [node name="World" type="Node2D" parent="." unique_id=1722049636]
 script = ExtResource("3_nwjj7")
 scroll_speed = 100.0
@@ -108,5 +102,14 @@ text = "KEEP"
 unique_name_in_owner = true
 layout_mode = 2
 text = "THROW BACK"
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=495015650]
+layer = -1
+
+[node name="Background" type="ColorRect" parent="BackgroundLayer" unique_id=88795416]
+z_index = -1
+offset_right = 1285.0
+offset_bottom = 730.0
+color = Color(0.006175897, 0.13546506, 0.521067, 1)
 
 [connection signal="pressed" from="UILayer/UI/ReturnButton" to="UILayer/UI/ReturnButton" method="_on_pressed"]
