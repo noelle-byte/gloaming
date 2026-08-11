@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://d210cwd6v5q2u" path="res://Scenes/fishing/obstacles/rock.tscn" id="5_qsnlf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qsnlf"]
-radius = 0.6567173
+radius = 22.0
 
 [node name="Fishing" type="Node2D" unique_id=1618200898]
 script = ExtResource("1_hiiat")
@@ -33,12 +33,13 @@ corruption_depth_step = 15.0
 
 [node name="Hook" type="CharacterBody2D" parent="." unique_id=1342734860]
 position = Vector2(641, 347.00003)
-scale = Vector2(33.5, 39.5)
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_et7wu")
 
 [node name="Polygon2D" type="Polygon2D" parent="Hook" unique_id=713463828]
+position = Vector2(6.9999995, -42.000027)
+scale = Vector2(33, 33)
 polygon = PackedVector2Array(0.5, 0, 0, 0, 0, 1.5, -0.5, 1.5, -1, 1, -0.6, 2, 0, 2, 0.5, 1.5)
 uv = PackedVector2Array(0.73052883, -0.015203178, -0.38621426, -0.07556766, -0.48555374, 1.524549, -1.3693504, 2.1653016, -2.0763884, 1.3698845, -2.5403814, 2.297871, -1.789154, 2.8281488, 0.04472351, 2.1653016)
 
