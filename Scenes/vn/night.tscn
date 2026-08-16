@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://bwbwf300ayp7i"]
 
-[ext_resource type="Script" uid="uid://o2ofidbtaea0" path="res://Scripts/sleep.gd" id="1_txvrf"]
+[ext_resource type="Script" uid="uid://cwfl5qaqe8o42" path="res://Scripts/night.gd" id="1_rnmau"]
+[ext_resource type="Texture2D" uid="uid://b4stisaym8vye" path="res://art/placeholders/home placeholder.png" id="2_2ypj0"]
+[ext_resource type="Texture2D" uid="uid://b6kdxahthfg6h" path="res://art/placeholders/elina portrait placeholder.png" id="3_npj12"]
 
 [node name="Night" type="Control" unique_id=1594188786]
 layout_mode = 3
@@ -9,22 +11,112 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_rnmau")
 
-[node name="Label" type="Label" parent="." unique_id=341962365]
-layout_mode = 0
-offset_left = 282.0
-offset_top = 189.0
-offset_right = 594.0
-offset_bottom = 279.0
-text = "its night time, go to bed"
+[node name="Background" type="TextureRect" parent="." unique_id=1976764190]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_2ypj0")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Sleep" type="Button" parent="." unique_id=810308518]
+[node name="Shade" type="ColorRect" parent="." unique_id=1919820780]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.31764707)
+
+[node name="ElinaPortrait" type="TextureRect" parent="." unique_id=214804734]
 layout_mode = 0
-offset_left = 683.0
-offset_top = 320.0
-offset_right = 882.0
-offset_bottom = 454.0
+offset_left = 730.0
+offset_top = 65.0
+offset_right = 1100.0
+offset_bottom = 595.0
+texture = ExtResource("3_npj12")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="CatchPanel" type="PanelContainer" parent="." unique_id=1485546087]
+visible = false
+layout_mode = 0
+offset_left = 50.0
+offset_top = 80.0
+offset_right = 470.0
+offset_bottom = 460.0
+
+[node name="CatchMargin" type="MarginContainer" parent="CatchPanel" unique_id=582449270]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="CatchVBox" type="VBoxContainer" parent="CatchPanel/CatchMargin" unique_id=558552404]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CatchTitle" type="Label" parent="CatchPanel/CatchMargin/CatchVBox" unique_id=1398922404]
+layout_mode = 2
+
+[node name="CatchSummeryLabel" type="Label" parent="CatchPanel/CatchMargin/CatchVBox" unique_id=841723680]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="TotalValueLabel" type="Label" parent="CatchPanel/CatchMargin/CatchVBox" unique_id=470571756]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SellButton" type="Button" parent="CatchPanel/CatchMargin/CatchVBox" unique_id=1255640024]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "continue"
+
+[node name="SleepButton" type="Button" parent="CatchPanel/CatchMargin/CatchVBox" unique_id=810308518]
+unique_name_in_owner = true
+layout_mode = 2
 text = "sleep"
-script = ExtResource("1_txvrf")
 
-[connection signal="pressed" from="Sleep" to="Sleep" method="_on_pressed"]
+[node name="DialoguePanel" type="PanelContainer" parent="." unique_id=706729194]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 520.0
+offset_right = 1245.0
+offset_bottom = 690.0
+
+[node name="DialogueMargin" type="MarginContainer" parent="DialoguePanel" unique_id=2007717616]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="DialogueVBox" type="VBoxContainer" parent="DialoguePanel/DialogueMargin" unique_id=63259383]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=1307260035]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DialogueLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=2122232]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=1619037339]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "continue"

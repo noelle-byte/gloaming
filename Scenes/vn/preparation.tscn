@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c38sfvxw8xnn5"]
 
 [ext_resource type="Script" uid="uid://66vl28gakswq" path="res://Scripts/preparation.gd" id="1_mucl5"]
+[ext_resource type="Texture2D" uid="uid://b4stisaym8vye" path="res://art/placeholders/home placeholder.png" id="2_x3s3y"]
 
 [node name="Preparation" type="Control" unique_id=384526187]
 layout_mode = 3
@@ -18,17 +19,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_x3s3y")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Darken" type="ColorRect" parent="." unique_id=2083839154]
+[node name="Shade" type="ColorRect" parent="." unique_id=2083839154]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.09803922)
+color = Color(0, 0, 0, 0.6745098)
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=60534422]
 layout_mode = 1

@@ -33,11 +33,15 @@ var dialogue := [
 	},
 	{
 		"speaker": "Juhani",
-		"text": "Before night."
+		"text": "That's the plan."
 	},
 	{
 		"speaker": "Elina",
-		"text": "That isn't what I asked Juhani."
+		"text": "See that it stays the plan. The... dark, it's not for us."
+	},
+	{
+		"speaker": "Elina",
+		"text": "See you soon Juhani."
 	}
 ]
 
