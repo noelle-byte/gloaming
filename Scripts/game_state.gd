@@ -245,3 +245,39 @@ func equip_rod(rod_id: String) -> bool:
 
 	equipped_rod = rod_id
 	return true
+
+# DAY // TUTORIAL
+
+var day_1_visits := {
+	"marek": false,
+	"aarne": false,
+	"ilari": false,
+	"voss": false
+}
+
+
+func mark_day_1_visit(person_id: String) -> void:
+	if person_id in day_1_visits:
+		day_1_visits[person_id] = true
+
+
+func has_visited_day_1(person_id: String) -> bool:
+	return day_1_visits.get(person_id, false)
+
+
+func day_1_visits_complete() -> bool:
+	for visited in day_1_visits.values():
+		if not visited:
+			return false
+
+	return true
+
+
+func get_missing_day_1_visits() -> Array[String]:
+	var missing: Array[String] = []
+
+	for person_id in day_1_visits:
+		if not day_1_visits[person_id]:
+			missing.append(person_id)
+
+	return missing

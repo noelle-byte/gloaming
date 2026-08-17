@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://csoylrlaae1j8"]
 
+[ext_resource type="Script" uid="uid://du2wxg07hgqke" path="res://Scripts/village.gd" id="1_5umva"]
 [ext_resource type="Script" uid="uid://bgl46q7icuok1" path="res://Scripts/visit_marek.gd" id="1_ew0vs"]
 [ext_resource type="Script" uid="uid://ba46vkj10mmot" path="res://Scripts/prepare.gd" id="1_wh0xy"]
 
@@ -10,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_5umva")
 
 [node name="Label" type="Label" parent="." unique_id=1899291218]
 layout_mode = 0

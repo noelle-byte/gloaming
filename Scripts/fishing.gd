@@ -109,6 +109,10 @@ func _end_fishing_night() -> void:
 	print("Fishing night finished.")
 	print("Catches: ", GameState.catches)
 
+	call_deferred("_go_to_night")
+
+
+func _go_to_night() -> void:
 	get_tree().change_scene_to_file(
 		"res://Scenes/vn/night.tscn"
 	)

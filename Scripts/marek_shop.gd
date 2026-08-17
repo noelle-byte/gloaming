@@ -17,6 +17,9 @@ func _ready() -> void:
 	dialogue_label.text = "Anything you need?"
 
 	_refresh_shop()
+	
+	if GameState.day == 1:
+		GameState.mark_day_1_visit("marek")
 
 
 func _refresh_shop() -> void:
