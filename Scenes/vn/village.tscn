@@ -66,12 +66,21 @@ offset_right = 626.0
 offset_bottom = 371.0
 text = "Visit Voss"
 
+[node name="VisitAino" type="Button" parent="." unique_id=962541815]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 474.0
+offset_top = 460.0
+offset_right = 626.0
+offset_bottom = 531.0
+text = "Visit Aino"
+
 [node name="PrepareForFishing" type="Button" parent="." unique_id=525934813]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 554.0
+offset_left = 634.0
 offset_top = 460.0
-offset_right = 706.0
+offset_right = 786.0
 offset_bottom = 531.0
 text = "prepare for fishing"
 script = ExtResource("1_wh0xy")
@@ -80,4 +89,5 @@ script = ExtResource("1_wh0xy")
 [connection signal="pressed" from="VisitAarne" to="VisitAarne" method="_on_pressed"]
 [connection signal="pressed" from="VisitIlari" to="VisitIlari" method="_on_pressed"]
 [connection signal="pressed" from="VisitVoss" to="VisitVoss" method="_on_pressed"]
+[connection signal="pressed" from="VisitAino" to="VisitAino" method="_on_pressed"]
 [connection signal="pressed" from="PrepareForFishing" to="PrepareForFishing" method="_on_pressed"]

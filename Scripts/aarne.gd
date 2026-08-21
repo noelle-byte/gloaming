@@ -22,7 +22,7 @@ var dialogue := [
 	},
 	{
 		"speaker": "Aarne",
-		"text": "For a doctor in winter? Never. People spend nine months pretending they're indestructible, then suddenly its cold reminds and my office is filled."
+		"text": "For a doctor in winter? Never. People spend nine months pretending they're indestructible, then suddenly its cold reminds and my office is fills."
 	},
 	{
 		"speaker": "Juhani",
@@ -54,7 +54,7 @@ var dialogue := [
 	},
 	{
 		"speaker": "Aarne",
-		"text": "Your more honest than most Mr Halme."
+		"text": "Your more honest than most, Mr Halme."
 	}
 ]
 

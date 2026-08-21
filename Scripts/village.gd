@@ -7,12 +7,14 @@ extends Control
 @onready var visit_voss: Button = %VisitVoss
 @onready var prepare_button: Button = %PrepareForFishing
 @onready var tutorial_status: Label = %TutorialStatus
+@onready var visit_aino: Button = %VisitAino
 
 
 func _ready() -> void:
 	visit_aarne.pressed.connect(_visit_aarne)
 	visit_ilari.pressed.connect(_visit_ilari)
 	visit_voss.pressed.connect(_visit_voss)
+	visit_aino.pressed.connect(_visit_aino)
 
 	_refresh()
 
@@ -46,6 +48,12 @@ func _refresh() -> void:
 		"Voss",
 		"voss"
 	)
+
+	_update_visit_button(
+	visit_aino,
+	"Aino's Fish Market",
+	"aino"
+)
 
 	var complete := GameState.day_1_visits_complete()
 
@@ -88,4 +96,9 @@ func _visit_ilari() -> void:
 func _visit_voss() -> void:
 	get_tree().change_scene_to_file(
 		"res://Scenes/vn/voss.tscn"
+	)
+
+func _visit_aino() -> void:
+	get_tree().change_scene_to_file(
+		"res://Scenes/vn/aino_market.tscn"
 	)

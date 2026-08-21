@@ -246,13 +246,73 @@ func equip_rod(rod_id: String) -> bool:
 	equipped_rod = rod_id
 	return true
 
-# DAY // TUTORIAL
+### FISH MARKET
+
+var fish_sold_totals: Dictionary = {}
+
+
+func get_catch_count(fish_name: String) -> int:
+	var total := 0
+
+	for fish in catches:
+		if fish["name"] == fish_name:
+			total += 1
+
+	return total
+
+
+func sell_one_catch(fish_name: String) -> int:
+	for i in range(catches.size()):
+		var fish: Dictionary = catches[i]
+
+		if fish["name"] != fish_name:
+			continue
+
+		var value: int = fish["value"]
+
+		catches.remove_at(i)
+		add_money(value)
+
+		fish_sold_totals[fish_name] = (
+			fish_sold_totals.get(fish_name, 0)
+			+ 1
+		)
+
+		return value
+
+	return 0
+
+
+func get_fish_sold_total(fish_name: String) -> int:
+	return fish_sold_totals.get(fish_name, 0)
+
+
+func buy_market_fish(
+	fish_name: String,
+	purchase_price: int,
+	resale_value: int,
+	corruption: int = 0
+) -> bool:
+
+	if not spend_money(purchase_price):
+		return false
+
+	add_catch(
+		fish_name,
+		resale_value,
+		corruption
+	)
+
+	return true
+
+### DAY // TUTORIAL
 
 var day_1_visits := {
 	"marek": false,
 	"aarne": false,
 	"ilari": false,
-	"voss": false
+	"voss": false,
+	"aino": false
 }
 
 
