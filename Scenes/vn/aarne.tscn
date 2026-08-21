@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://ceg5rkbgvafda"]
+
+[ext_resource type="Script" uid="uid://cwsncg6ge1fkj" path="res://Scripts/aarne.gd" id="1_giucd"]
+[ext_resource type="Texture2D" uid="uid://b4stisaym8vye" path="res://art/placeholders/home placeholder.png" id="2_owg7h"]
+[ext_resource type="Texture2D" uid="uid://b6kdxahthfg6h" path="res://art/placeholders/elina portrait placeholder.png" id="3_anarp"]
+
+[node name="Aarne" type="Control" unique_id=1015261371]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_giucd")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1773219913]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_owg7h")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="ColorRect" parent="." unique_id=519123713]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.1254902)
+
+[node name="ElinaPortrait" type="TextureRect" parent="." unique_id=676728348]
+layout_mode = 0
+offset_left = 730.0
+offset_top = 65.0
+offset_right = 1100.0
+offset_bottom = 595.0
+texture = ExtResource("3_anarp")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="DialoguePanel" type="PanelContainer" parent="." unique_id=414564649]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 520.0
+offset_right = 1245.0
+offset_bottom = 690.0
+
+[node name="DialogueMargin" type="MarginContainer" parent="DialoguePanel" unique_id=5621147]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="DialogueVBox" type="VBoxContainer" parent="DialoguePanel/DialogueMargin" unique_id=317325741]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=1951874918]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DialogueLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=488012671]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=421487479]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "continue"
+
+[node name="Label" type="Label" parent="." unique_id=1329304207]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 137.0
+offset_top = 126.0
+offset_right = 358.92514
+offset_bottom = 156.4813
+text = "PRETEND THIS IS A DOCTORS OFFICE"
+
+[node name="Label2" type="Label" parent="." unique_id=1516077668]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 810.0
+offset_top = 147.0
+offset_right = 1031.9252
+offset_bottom = 177.4813
+text = "PRETEND THIS IS AARNE"
