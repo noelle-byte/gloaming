@@ -91,7 +91,7 @@ func _on_continue_pressed() -> void:
 
 func _end_conversation() -> void:
 	if GameState.day == 1:
-		GameState.mark_day_1_visit("ilari")
+		GameState.mark_day_1_visit("aarne")
 
 	get_tree().change_scene_to_file(
 		"res://Scenes/vn/village.tscn"
