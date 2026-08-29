@@ -1,5 +1,9 @@
 [gd_scene format=3 uid="uid://dc8vdwkcs7r7l"]
 
+[ext_resource type="Script" uid="uid://di77k0nwscxb8" path="res://Scripts/aino_market.gd" id="1_hly0o"]
+[ext_resource type="Texture2D" uid="uid://bpogf7wvvfkyg" path="res://art/placeholders/marek shop placeholder.png" id="2_7v17j"]
+[ext_resource type="Texture2D" uid="uid://buiwfmqbmh6p4" path="res://art/placeholders/marek portrait placeholder.png" id="3_goluc"]
+
 [node name="AinoMarket" type="Control" unique_id=865948035]
 layout_mode = 3
 anchors_preset = 15
@@ -7,3 +11,126 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_hly0o")
+
+[node name="Background" type="TextureRect" parent="." unique_id=661794549]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_7v17j")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="ColorRect" parent="." unique_id=254330361]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.1254902)
+
+[node name="AinoPortrait" type="TextureRect" parent="." unique_id=108408970]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 70.0
+offset_right = 410.0
+offset_bottom = 600.0
+texture = ExtResource("3_goluc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ShopPanel" type="PanelContainer" parent="." unique_id=929835912]
+layout_mode = 0
+offset_left = 760.0
+offset_top = 35.0
+offset_right = 1240.0
+offset_bottom = 510.0
+
+[node name="ShopMargin" type="MarginContainer" parent="ShopPanel" unique_id=1785930394]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 18
+
+[node name="ShopVBox" type="VBoxContainer" parent="ShopPanel/ShopMargin" unique_id=692973080]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShopHeader" type="HBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=296035737]
+layout_mode = 2
+
+[node name="ShopTitle" type="Label" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1735560994]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Aino's fish market"
+
+[node name="MoneyLabel" type="Label" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1018764937]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=449337279]
+layout_mode = 2
+
+[node name="ItemScroll" type="ScrollContainer" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=1309322999]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemList" type="VBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ItemScroll" unique_id=155915596]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeaveButton" type="Button" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=2049477464]
+unique_name_in_owner = true
+layout_mode = 2
+text = "leave"
+
+[node name="DialoguePanel" type="PanelContainer" parent="." unique_id=685138922]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 520.0
+offset_right = 1245.0
+offset_bottom = 690.0
+
+[node name="DialogueMargin" type="MarginContainer" parent="DialoguePanel" unique_id=1141816271]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="DialogueVBox" type="VBoxContainer" parent="DialoguePanel/DialogueMargin" unique_id=1455679391]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=554941852]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DialogueLabel" type="Label" parent="DialoguePanel/DialogueMargin/DialogueVBox" unique_id=720516575]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Label" type="Label" parent="." unique_id=477127190]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 500.0
+offset_top = 86.0
+offset_right = 745.0
+offset_bottom = 116.48129
+text = "PRETEND THIS IS A FISHMARKET"
+
+[node name="Label2" type="Label" parent="." unique_id=124396395]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 113.0
+offset_top = 94.0
+offset_right = 334.92517
+offset_bottom = 124.48129
+text = "PRETEND THIS IS AINO"
