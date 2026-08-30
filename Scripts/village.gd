@@ -40,8 +40,17 @@ func _ready() -> void:
 			"res://Scenes/vn/aino_market.tscn"
 		)
 	)
+	
+	prepare_button.pressed.connect(
+		_go_to_preparation
+	)
 
 	_refresh()
+
+func _go_to_preparation() -> void:
+	get_tree().change_scene_to_file(
+		"res://Scenes/vn/preparation.tscn"
+	)
 
 func _visit_person(scene_path: String) -> void:
 	if not GameState.spend_day_action():
