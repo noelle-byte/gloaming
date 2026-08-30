@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://csoylrlaae1j8"]
 
 [ext_resource type="Script" uid="uid://du2wxg07hgqke" path="res://Scripts/village.gd" id="1_5umva"]
-[ext_resource type="Script" uid="uid://bgl46q7icuok1" path="res://Scripts/visit_marek.gd" id="1_ew0vs"]
 [ext_resource type="Script" uid="uid://ba46vkj10mmot" path="res://Scripts/prepare.gd" id="1_wh0xy"]
 
 [node name="Village" type="Control" unique_id=139495779]
@@ -37,7 +36,6 @@ offset_top = 380.0
 offset_right = 786.0
 offset_bottom = 451.0
 text = "Visit Marek"
-script = ExtResource("1_ew0vs")
 
 [node name="VisitAarne" type="Button" parent="." unique_id=662910491]
 unique_name_in_owner = true

@@ -143,26 +143,3 @@ func _update_visit_button(
 		button.text = display_name + " ✓"
 	else:
 		button.text = display_name
-
-
-func _visit_aarne() -> void:
-	get_tree().change_scene_to_file(
-		"res://Scenes/vn/aarne.tscn"
-	)
-
-
-func _visit_ilari() -> void:
-	get_tree().change_scene_to_file(
-		"res://Scenes/vn/ilari.tscn"
-	)
-
-
-func _visit_voss() -> void:
-	get_tree().change_scene_to_file(
-		"res://Scenes/vn/voss.tscn"
-	)
-
-func _visit_aino() -> void:
-	get_tree().change_scene_to_file(
-		"res://Scenes/vn/aino_market.tscn"
-	)
