@@ -4,10 +4,23 @@ extends Node
 
 var day: int = 1
 
-# Test money
-var money: int = 20
+# starting money
+var money: int = 5
 
-var quota: int = 25
+### RENT
+
+var base_rent: int = 25
+var current_rent: int = 25
+
+var rent_due_day: int = 4
+
+var rent_delays: int = 0
+
+var next_rent_fees: int = 0
+
+var rent_fee_rate: float = 0.15
+
+var rent_paid_this_cycle: bool = false
 
 
 ### CAUGHT FISH
@@ -33,7 +46,6 @@ var owned_rods: Array[String] = [
 var equipped_rod: String = "old_ash"
 
 
-# We can add these properly once their systems exist.
 var equipped_line: String = "hemp"
 var equipped_hook: String = "standard"
 var equipped_lantern: String = "none"
@@ -42,9 +54,6 @@ var equipped_talisman: String = "none"
 
 ### BAIT POUCH
 
-# Bait in the house is inventory.
-# Bait in this dictionary is what Juhani actually
-# carries onto the lake tonight.
 var bait_pouch: Dictionary = {}
 
 var bait_pouch_capacity: int = 4
@@ -52,13 +61,14 @@ var bait_pouch_capacity: int = 4
 
 ### DAY
 
-var max_day_actions: int = 4
-var day_actions_remaining: int = 4
+var max_day_actions: int = 3
+var day_actions_remaining: int = 3
 
 
 func next_day() -> void:
 	day += 1
 	day_actions_remaining = max_day_actions
+	visited_voss_today = false
 
 
 func can_spend_day_action() -> bool:
@@ -101,6 +111,81 @@ func spend_money(amount: int) -> bool:
 func add_money(amount: int) -> void:
 	money += amount
 
+### RENT
+
+func get_rent_fee() -> int:
+	return ceili(base_rent * rent_fee_rate)
+
+
+func days_until_rent() -> int:
+	return max(rent_due_day - day, 0)
+
+
+func rent_is_due() -> bool:
+	return day >= rent_due_day and not rent_paid_this_cycle
+
+
+func can_pay_rent() -> bool:
+	return money >= current_rent
+
+
+func pay_rent() -> bool:
+	if not rent_is_due():
+		return false
+
+	if not spend_money(current_rent):
+		return false
+
+	_finish_rent_cycle()
+	return true
+
+func _finish_rent_cycle() -> void:
+	rent_delays = 0
+	rent_paid_this_cycle = true
+
+	# Endless winter scaling.
+	base_rent += 5
+
+	current_rent = (
+		base_rent
+		+ next_rent_fees
+	)
+
+	next_rent_fees = 0
+
+	rent_due_day += 3
+
+func request_rent_extension() -> bool:
+	if not rent_is_due():
+		return false
+
+	if rent_delays >= 2:
+		return false
+
+	rent_delays += 1
+
+	# Extension fee applies to what Juhani needs
+	# to settle THIS rent cycle.
+	current_rent += get_rent_fee()
+
+	rent_due_day += 1
+
+	return true
+
+func add_collection_fee() -> void:
+	next_rent_fees += get_rent_fee()
+
+var visited_voss_today: bool = false
+
+func _visit_voss() -> void:
+	if not GameState.spend_day_action():
+		return
+
+	GameState.visited_voss_today = true
+
+	get_tree().change_scene_to_file(
+		"res://Scenes/vn/voss.tscn"
+	)
 
 ### INVENTORY
 
