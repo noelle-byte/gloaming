@@ -76,13 +76,6 @@ autowrap_mode = 3
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SellButton" type="Button" parent="CatchPanel/CatchMargin/CatchVBox" unique_id=1255640024]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 10
-text = "continue"
-
 [node name="SleepButton" type="Button" parent="CatchPanel/CatchMargin/CatchVBox" unique_id=810308518]
 unique_name_in_owner = true
 layout_mode = 2

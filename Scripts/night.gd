@@ -100,7 +100,6 @@ const GENERIC_DIALOGUE := [
 @onready var catch_panel: Control = %CatchPanel
 @onready var catch_summary_label: Label = %CatchSummaryLabel
 @onready var total_value_label: Label = %TotalValueLabel
-@onready var sell_button: Button = %SellButton
 @onready var sleep_button: Button = %SleepButton
 
 
@@ -118,9 +117,6 @@ func _ready() -> void:
 		_on_continue_pressed
 	)
 
-	sell_button.pressed.connect(
-		_on_sell_pressed
-	)
 
 	sleep_button.pressed.connect(
 		_on_sleep_pressed
@@ -186,20 +182,9 @@ func _show_catches() -> void:
 		catch_summary_label.text = "\n".join(lines)
 
 	total_value_label.text = (
-		"Potential value: %d mk"
-		% GameState.get_total_catch_value()
+		"%d fish brought home."
+		% GameState.catches.size()
 	)
-
-	sell_button.disabled = GameState.catches.is_empty()
-
-
-func _on_sell_pressed() -> void:
-	var earned := GameState.sell_all_catches()
-
-	catch_summary_label.text = "Catch sold."
-	total_value_label.text = "+%d mk" % earned
-
-	sell_button.disabled = true
 
 
 func _on_sleep_pressed() -> void:

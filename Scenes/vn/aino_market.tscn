@@ -69,6 +69,20 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Aino's fish market"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1061959262]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="SellModeButton" type="Button" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader/HBoxContainer" unique_id=159889815]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SELL"
+
+[node name="BuyModeButton" type="Button" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader/HBoxContainer" unique_id=2065187015]
+unique_name_in_owner = true
+layout_mode = 2
+text = "BUY"
+
 [node name="MoneyLabel" type="Label" parent="ShopPanel/ShopMargin/ShopVBox/ShopHeader" unique_id=1018764937]
 unique_name_in_owner = true
 layout_mode = 2
