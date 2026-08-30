@@ -85,6 +85,15 @@ offset_bottom = 531.0
 text = "prepare for fishing"
 script = ExtResource("1_wh0xy")
 
+[node name="TimeLabel" type="Label" parent="." unique_id=619123009]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1090.0
+offset_top = 354.0
+offset_right = 1231.0
+offset_bottom = 377.0
+text = "MIDDAY - VILLAGE"
+
 [connection signal="pressed" from="VisitMarek" to="VisitMarek" method="_on_pressed"]
 [connection signal="pressed" from="VisitAarne" to="VisitAarne" method="_on_pressed"]
 [connection signal="pressed" from="VisitIlari" to="VisitIlari" method="_on_pressed"]

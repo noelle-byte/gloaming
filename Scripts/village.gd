@@ -8,22 +8,85 @@ extends Control
 @onready var prepare_button: Button = %PrepareForFishing
 @onready var tutorial_status: Label = %TutorialStatus
 @onready var visit_aino: Button = %VisitAino
-
+@onready var time_label: Label = %TimeLabel
 
 func _ready() -> void:
-	visit_aarne.pressed.connect(_visit_aarne)
-	visit_ilari.pressed.connect(_visit_ilari)
-	visit_voss.pressed.connect(_visit_voss)
-	visit_aino.pressed.connect(_visit_aino)
+	visit_marek.pressed.connect(
+		_visit_person.bind(
+			"res://Scenes/vn/marek_shop.tscn"
+		)
+	)
+
+	visit_aarne.pressed.connect(
+		_visit_person.bind(
+			"res://Scenes/vn/aarne.tscn"
+		)
+	)
+
+	visit_ilari.pressed.connect(
+		_visit_person.bind(
+			"res://Scenes/vn/ilari.tscn"
+		)
+	)
+
+	visit_voss.pressed.connect(
+		_visit_person.bind(
+			"res://Scenes/vn/voss.tscn"
+		)
+	)
+
+	visit_aino.pressed.connect(
+		_visit_person.bind(
+			"res://Scenes/vn/aino_market.tscn"
+		)
+	)
 
 	_refresh()
 
+func _visit_person(scene_path: String) -> void:
+	if not GameState.spend_day_action():
+		return
+
+	get_tree().change_scene_to_file(
+		scene_path
+	)
+
+func _refresh_time() -> void:
+	if GameState.day == 1:
+		time_label.text = "Tutorial Day"
+		return
+
+	var filled := ""
+	var empty := ""
+
+	for i in range(GameState.max_day_actions):
+		if i < GameState.day_actions_remaining:
+			filled += "● "
+		else:
+			empty += "○ "
+
+	time_label.text = "Time: " + filled + empty
+
+func _refresh_action_buttons() -> void:
+	var has_time := GameState.can_spend_day_action()
+
+	visit_marek.disabled = not has_time
+	visit_aarne.disabled = not has_time
+	visit_ilari.disabled = not has_time
+	visit_voss.disabled = not has_time
+	visit_aino.disabled = not has_time
 
 func _refresh() -> void:
+	_refresh_time()
+
 	if GameState.day != 1:
+		_refresh_action_buttons()
+
 		prepare_button.disabled = false
 		tutorial_status.text = ""
 		return
+
+	# Existing Day 1 tutorial code below...
 
 	_update_visit_button(
 		visit_marek,
@@ -54,6 +117,7 @@ func _refresh() -> void:
 	"Aino's Fish Market",
 	"aino"
 )
+
 
 	var complete := GameState.day_1_visits_complete()
 

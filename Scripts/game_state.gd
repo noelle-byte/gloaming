@@ -52,9 +52,37 @@ var bait_pouch_capacity: int = 4
 
 ### DAY
 
+var max_day_actions: int = 4
+var day_actions_remaining: int = 4
+
+
 func next_day() -> void:
 	day += 1
+	day_actions_remaining = max_day_actions
 
+
+func can_spend_day_action() -> bool:
+	# Day 1 tutorial visits are free.
+	if day == 1:
+		return true
+
+	return day_actions_remaining > 0
+
+
+func spend_day_action() -> bool:
+	# Day 1 deliberately ignores AP.
+	if day == 1:
+		return true
+
+	if day_actions_remaining <= 0:
+		return false
+
+	day_actions_remaining -= 1
+	return true
+
+
+func forfeit_day_actions() -> void:
+	day_actions_remaining = 0
 
 ### MONEY
 
