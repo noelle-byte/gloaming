@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bni7h0hlqm6t2"]
 
+[ext_resource type="Script" uid="uid://chljdrrw7n8ph" path="res://Scripts/poverty.gd" id="1_1owl2"]
+
 [node name="Poverty" type="Control" unique_id=561527142]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1owl2")
 
 [node name="Title" type="Label" parent="." unique_id=1510841416]
 layout_mode = 0

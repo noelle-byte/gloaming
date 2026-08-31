@@ -25,9 +25,11 @@ var owned_rods: Array[String] = [
 	"old_ash"
 ]
 
+var owned_hooks: Array[String] = [
+	"standard"
+]
+
 var equipped_rod: String = "old_ash"
-
-
 var equipped_line: String = "hemp"
 var equipped_hook: String = "standard"
 var equipped_lantern: String = "none"
@@ -202,6 +204,68 @@ func remove_item(
 
 	return true
 
+func owns_hook(hook_id: String) -> bool:
+	return hook_id in owned_hooks
+
+
+func add_hook(hook_id: String) -> bool:
+	if owns_hook(hook_id):
+		return false
+
+	owned_hooks.append(hook_id)
+	return true
+
+
+func equip_hook(hook_id: String) -> bool:
+	if not owns_hook(hook_id):
+		return false
+
+	equipped_hook = hook_id
+	return true
+
+### RESET RUN
+
+func reset_run() -> void:
+	day = 1
+	money = 5
+
+	catches.clear()
+
+	inventory = {
+		"worms": 8
+	}
+
+	owned_rods = [
+		"old_ash"
+	]
+	
+
+	equipped_rod = "old_ash"
+	equipped_line = "hemp"
+	equipped_hook = "standard"
+	equipped_lantern = "none"
+	equipped_talisman = "none"
+
+	bait_pouch.clear()
+
+	day_actions_remaining = max_day_actions
+
+	base_rent = 25
+	current_rent = 25
+	rent_due_day = 4
+	rent_delays = 0
+	next_rent_fees = 0
+	visited_voss_today = false
+
+	fish_sold_totals.clear()
+
+	day_1_visits = {
+		"marek": false,
+		"aarne": false,
+		"ilari": false,
+		"voss": false,
+		"aino": false
+	}
 
 ### BAIT POUCH
 

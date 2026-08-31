@@ -80,7 +80,19 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ItemList" type="VBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ItemScroll" unique_id=944400943]
+[node name="RodList" type="VBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ItemScroll" unique_id=944400943]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator2" type="HSeparator" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=878090464]
+layout_mode = 2
+
+[node name="ItemScroll2" type="ScrollContainer" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=1024996945]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HookList" type="VBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ItemScroll2" unique_id=186241675]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

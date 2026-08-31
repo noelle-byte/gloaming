@@ -135,13 +135,6 @@ func _continue_setup() -> void:
 	catch_panel.hide()
 	_show_dialogue()
 
-	sleep_button.pressed.connect(
-		_on_sleep_pressed
-	)
-
-	catch_panel.hide()
-
-	_show_dialogue()
 
 func _handle_voss_collection() -> bool:
 	GameState.add_collection_fee()

@@ -60,6 +60,27 @@ const RODS := {
 	}
 }
 
+const HOOKS := {
+	"standard": {
+		"name": "Standard Hook",
+		"description": "Small and dependable.",
+		"price": 0,
+		"radius": 22.0,
+		"power": 1
+	},
+
+	"bigboy": {
+		"name": "Heavy Gaff",
+		"description": "Made for fish that should probably be left alone.",
+		"price": 20,
+		"radius": 34.0,
+		"power": 2
+	}
+}
+
+
+static func get_hook(id: String) -> Dictionary:
+	return HOOKS.get(id, {})
 
 static func get_bait(id: String) -> Dictionary:
 	return BAITS.get(id, {})

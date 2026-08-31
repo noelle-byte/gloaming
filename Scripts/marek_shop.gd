@@ -2,7 +2,8 @@ extends Control
 
 
 @onready var money_label: Label = %MoneyLabel
-@onready var item_list: VBoxContainer = %ItemList
+@onready var rod_list: VBoxContainer = %RodList
+@onready var hook_list: VBoxContainer = %HookList
 
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var dialogue_label: Label = %DialogueLabel
@@ -23,7 +24,7 @@ func _ready() -> void:
 
 
 func _refresh_shop() -> void:
-	for child in item_list.get_children():
+	for child in rod_list.get_children():
 		child.queue_free()
 
 	money_label.text = "%d mk" % GameState.money
@@ -41,15 +42,22 @@ func _refresh_shop() -> void:
 
 		_create_rod_row(rod_id)
 
+	_create_section("HOOKS")
+
+	for hook_id in GearDatabase.HOOKS:
+		if hook_id == "standard":
+			continue
+
+		_create_hook_row(hook_id)
 
 func _create_section(title: String) -> void:
 	var label := Label.new()
 	label.text = title
 
-	item_list.add_child(label)
+	rod_list.add_child(label)
 
 	var separator := HSeparator.new()
-	item_list.add_child(separator)
+	rod_list.add_child(separator)
 
 
 func _create_bait_row(bait_id: String) -> void:
@@ -59,7 +67,7 @@ func _create_bait_row(bait_id: String) -> void:
 	var owned := GameState.get_item_count(bait_id)
 
 	var row := HBoxContainer.new()
-	item_list.add_child(row)
+	rod_list.add_child(row)
 
 	var name_label := Label.new()
 	name_label.text = "%s ×%d" % [
@@ -93,7 +101,7 @@ func _create_rod_row(rod_id: String) -> void:
 	var price: int = rod.get("price", 0)
 
 	var row := HBoxContainer.new()
-	item_list.add_child(row)
+	rod_list.add_child(row)
 
 	var label := Label.new()
 
@@ -126,6 +134,44 @@ func _create_rod_row(rod_id: String) -> void:
 
 	row.add_child(buy_button)
 
+func _create_hook_row(hook_id: String) -> void:
+	var hook: Dictionary = GearDatabase.get_hook(hook_id)
+
+	var price: int = hook.get("price", 0)
+
+	var row := HBoxContainer.new()
+	hook_list.add_child(row)
+
+	var label := Label.new()
+
+	var name_label := Label.new()
+	name_label.text = hook.get("name", hook_id)
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(name_label)
+
+	var price_label := Label.new()
+	price_label.text = "%d mk" % price
+	price_label.custom_minimum_size.x = 55
+	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.add_child(price_label)
+
+	var buy_button := Button.new()
+
+	if GameState.owns_hook(hook_id):
+		buy_button.text = "Owned"
+		buy_button.disabled = true
+
+	else:
+		buy_button.text = "Buy"
+		buy_button.disabled = (
+			not GameState.can_afford(price)
+		)
+
+		buy_button.pressed.connect(
+			_buy_hook.bind(hook_id)
+		)
+
+	row.add_child(buy_button)
 
 func _buy_bait(bait_id: String) -> void:
 	var bait: Dictionary = GearDatabase.get_bait(bait_id)
@@ -169,6 +215,28 @@ func _buy_rod(rod_id: String) -> void:
 
 	_refresh_shop()
 
+func _buy_hook(hook_id: String) -> void:
+	var hook: Dictionary = GearDatabase.get_hook(hook_id)
+
+	var price: int = hook.get("price", 0)
+
+	if GameState.owns_hook(hook_id):
+		return
+
+	if not GameState.spend_money(price):
+		_set_dialogue(
+			"Put it back, Juhani."
+		)
+		return
+
+	GameState.add_hook(hook_id)
+
+	_set_dialogue(
+		_get_hook_purchase_line(hook_id)
+	)
+
+	_refresh_shop()
+
 
 func _get_bait_purchase_line(
 	bait_id: String
@@ -205,6 +273,16 @@ func _get_rod_purchase_line(
 		_:
 			return "Good rod."
 
+func _get_hook_purchase_line(
+	hook_id: String
+) -> String:
+
+	match hook_id:
+		"bigboy":
+			return "Not much that could wiggle free from that beauty."
+
+		_:
+			return "Good hook."
 
 func _set_dialogue(text: String) -> void:
 	speaker_label.text = "Marek"
