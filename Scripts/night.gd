@@ -108,15 +108,32 @@ var dialogue_index := 0
 
 
 func _ready() -> void:
+	if (
+		GameState.day > 1
+		and GameState.rent_is_due()
+		and not GameState.visited_voss_today
+	):
+		if _handle_voss_collection():
+			return
+
 	if GameState.day == 1:
 		dialogue = DAY_1_DIALOGUE
 	else:
 		dialogue = GENERIC_DIALOGUE
 
+	_continue_setup()
+
+func _continue_setup() -> void:
 	continue_button.pressed.connect(
 		_on_continue_pressed
 	)
 
+	sleep_button.pressed.connect(
+		_on_sleep_pressed
+	)
+
+	catch_panel.hide()
+	_show_dialogue()
 
 	sleep_button.pressed.connect(
 		_on_sleep_pressed
@@ -126,6 +143,57 @@ func _ready() -> void:
 
 	_show_dialogue()
 
+func _handle_voss_collection() -> bool:
+	GameState.add_collection_fee()
+
+	if GameState.can_pay_rent():
+		var amount := GameState.current_rent
+
+		GameState.pay_rent()
+
+		dialogue = [
+			{
+				"speaker": "Voss",
+				"text": "%d markka." % amount
+			},
+			{
+				"speaker": "Juhani",
+				"text": "You could have waited until morning."
+			},
+			{
+				"speaker": "Voss",
+				"text": "You could have come to my office."
+			}
+		]
+
+		_continue_setup()
+		return true
+
+	if GameState.rent_delays >= 2:
+		get_tree().change_scene_to_file(
+			"res://Scenes/endings/poverty.tscn"
+		)
+		return true
+
+	GameState.request_rent_extension()
+
+	dialogue = [
+		{
+			"speaker": "Voss",
+			"text": "You weren't at my office."
+		},
+		{
+			"speaker": "Juhani",
+			"text": "I don't have it."
+		},
+		{
+			"speaker": "Voss",
+			"text": "Tomorrow, then. This will cost you."
+		}
+	]
+
+	_continue_setup()
+	return true
 
 func _show_dialogue() -> void:
 	var line: Dictionary = dialogue[dialogue_index]
@@ -182,8 +250,8 @@ func _show_catches() -> void:
 		catch_summary_label.text = "\n".join(lines)
 
 	total_value_label.text = (
-		"%d fish brought home."
-		% GameState.catches.size()
+		"Stored value: %d mk"
+		% GameState.get_total_catch_value()
 	)
 
 

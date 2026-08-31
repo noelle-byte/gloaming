@@ -4,7 +4,6 @@ extends Node
 
 var day: int = 1
 
-# starting money
 var money: int = 5
 
 
@@ -15,8 +14,6 @@ var catches: Array[Dictionary] = []
 
 ### INVENTORY
 
-# Consumables / stackable items.
-# item_id : quantity
 var inventory: Dictionary = {
 	"worms": 8
 }
@@ -140,7 +137,7 @@ func pay_rent() -> bool:
 func _finish_rent_cycle() -> void:
 	rent_delays = 0
 
-	base_rent += 5
+	base_rent = ceili(base_rent * 1.3)
 
 	current_rent = (
 		base_rent
