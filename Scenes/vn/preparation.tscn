@@ -109,7 +109,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "skip night"
 
-[node name="SkipConformation" type="ConfirmationDialog" parent="." unique_id=1837488574]
+[node name="SkipConfirmation" type="ConfirmationDialog" parent="." unique_id=1837488574]
 unique_name_in_owner = true
 title = "Skip the gloaming?"
 ok_button_text = "Go Home"
