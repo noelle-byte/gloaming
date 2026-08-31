@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://bni7h0hlqm6t2"]
+
+[node name="Poverty" type="Control" unique_id=561527142]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="." unique_id=1510841416]
+layout_mode = 0
+offset_left = 480.0
+offset_top = 74.0
+offset_right = 520.0
+offset_bottom = 97.0
+
+[node name="Description" type="Label" parent="." unique_id=1687791621]
+layout_mode = 0
+offset_left = 472.0
+offset_top = 161.0
+offset_right = 512.0
+offset_bottom = 184.0
+
+[node name="DaysSurvived" type="Label" parent="." unique_id=382417492]
+layout_mode = 0
+offset_left = 473.0
+offset_top = 268.0
+offset_right = 513.0
+offset_bottom = 291.0
+
+[node name="RestartButton" type="Button" parent="." unique_id=1724759803]
+layout_mode = 0
+offset_left = 399.0
+offset_top = 325.0
+offset_right = 603.0
+offset_bottom = 376.0
+text = "restart"

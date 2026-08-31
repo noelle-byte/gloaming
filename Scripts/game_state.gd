@@ -7,21 +7,6 @@ var day: int = 1
 # starting money
 var money: int = 5
 
-### RENT
-
-var base_rent: int = 25
-var current_rent: int = 25
-
-var rent_due_day: int = 4
-
-var rent_delays: int = 0
-
-var next_rent_fees: int = 0
-
-var rent_fee_rate: float = 0.15
-
-var rent_paid_this_cycle: bool = false
-
 
 ### CAUGHT FISH
 
@@ -113,6 +98,18 @@ func add_money(amount: int) -> void:
 
 ### RENT
 
+var base_rent: int = 25
+var current_rent: int = 25
+
+var rent_due_day: int = 4
+var rent_delays: int = 0
+
+var next_rent_fees: int = 0
+var rent_fee_rate: float = 0.15
+
+var visited_voss_today: bool = false
+
+
 func get_rent_fee() -> int:
 	return ceili(base_rent * rent_fee_rate)
 
@@ -122,7 +119,7 @@ func days_until_rent() -> int:
 
 
 func rent_is_due() -> bool:
-	return day >= rent_due_day and not rent_paid_this_cycle
+	return day >= rent_due_day
 
 
 func can_pay_rent() -> bool:
@@ -139,11 +136,10 @@ func pay_rent() -> bool:
 	_finish_rent_cycle()
 	return true
 
+
 func _finish_rent_cycle() -> void:
 	rent_delays = 0
-	rent_paid_this_cycle = true
 
-	# Endless winter scaling.
 	base_rent += 5
 
 	current_rent = (
@@ -152,8 +148,8 @@ func _finish_rent_cycle() -> void:
 	)
 
 	next_rent_fees = 0
-
 	rent_due_day += 3
+
 
 func request_rent_extension() -> bool:
 	if not rent_is_due():
@@ -163,29 +159,15 @@ func request_rent_extension() -> bool:
 		return false
 
 	rent_delays += 1
-
-	# Extension fee applies to what Juhani needs
-	# to settle THIS rent cycle.
 	current_rent += get_rent_fee()
-
 	rent_due_day += 1
 
 	return true
 
+
 func add_collection_fee() -> void:
 	next_rent_fees += get_rent_fee()
 
-var visited_voss_today: bool = false
-
-func _visit_voss() -> void:
-	if not GameState.spend_day_action():
-		return
-
-	GameState.visited_voss_today = true
-
-	get_tree().change_scene_to_file(
-		"res://Scenes/vn/voss.tscn"
-	)
 
 ### INVENTORY
 

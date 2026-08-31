@@ -30,9 +30,7 @@ func _ready() -> void:
 	)
 
 	visit_voss.pressed.connect(
-		_visit_person.bind(
-			"res://Scenes/vn/voss.tscn"
-		)
+		_visit_voss
 	)
 
 	visit_aino.pressed.connect(
@@ -46,6 +44,16 @@ func _ready() -> void:
 	)
 
 	_refresh()
+
+func _visit_voss() -> void:
+	if not GameState.spend_day_action():
+		return
+
+	GameState.visited_voss_today = true
+
+	get_tree().change_scene_to_file(
+		"res://Scenes/vn/voss.tscn"
+	)
 
 func _go_to_preparation() -> void:
 	get_tree().change_scene_to_file(
