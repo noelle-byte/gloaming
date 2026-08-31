@@ -12,6 +12,10 @@ extends Node2D
 @onready var bait_buttons: VBoxContainer = %BaitButtons
 @onready var leave_lake_button: Button = %LeaveLakeButton
 
+@onready var catch_collision: CollisionShape2D = (
+	$CatchArea/CollisionShape2D
+)
+
 var cast_started := false
 var current_fish: Fish
 
@@ -30,6 +34,71 @@ func _ready() -> void:
 	# Don't descend until the player chooses bait.
 	world.stop_scrolling()
 	hook.can_move = false
+
+	_apply_equipped_hook()
+
+	_show_hook_selection()
+
+func _apply_equipped_hook() -> void:
+	var hook_data := GearDatabase.get_hook(
+		GameState.equipped_hook
+	)
+
+	var radius: float = hook_data.get(
+		"radius",
+		22.0
+	)
+
+	var body_shape := CircleShape2D.new()
+	body_shape.radius = radius
+	body_collision.shape = body_shape
+
+	var catch_shape := CircleShape2D.new()
+	catch_shape.radius = radius
+	catch_collision.shape = catch_shape
+
+func _show_hook_selection() -> void:
+	for child in bait_buttons.get_children():
+		child.queue_free()
+
+	bait_panel.show()
+
+	var hook_counts := (
+		GameState.get_loaded_equipment_counts("hook")
+	)
+
+	if hook_counts.is_empty():
+		_end_fishing_night()
+		return
+
+	var hook_ids := hook_counts.keys()
+	hook_ids.sort()
+
+	for hook_id in hook_ids:
+		var hook_data := GearDatabase.get_hook(hook_id)
+
+		var button := Button.new()
+		button.text = "%s ×%d" % [
+			hook_data.get("name", hook_id),
+			hook_counts[hook_id]
+		]
+
+		button.pressed.connect(
+			_on_hook_selected.bind(hook_id)
+		)
+
+		bait_buttons.add_child(button)
+
+func _on_hook_selected(hook_id: String) -> void:
+	var uid := GameState.get_loaded_equipment_uid(
+		"hook",
+		hook_id
+	)
+
+	if uid == 0:
+		return
+
+	GameState.set_active_equipment(uid)
 
 	_show_bait_selection()
 

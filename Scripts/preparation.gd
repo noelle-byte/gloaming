@@ -34,6 +34,93 @@ func _ready() -> void:
 
 	add_child(skip_confirmation)
 
+	_create_section("BAIT")
+
+	for bait_id in bait_ids:
+		_create_bait_row(bait_id)
+
+	_create_section("HOOKS")
+
+	var hook_ids := GearDatabase.HOOKS.keys()
+	hook_ids.sort()
+
+	for hook_id in hook_ids:
+		_create_hook_row(hook_id)
+
+	_refresh()
+
+func _create_section(title: String) -> void:
+	var label := Label.new()
+	label.text = title
+	bait_list.add_child(label)
+
+	var separator := HSeparator.new()
+	bait_list.add_child(separator)
+
+func _create_hook_row(hook_id: String) -> void:
+	var hook: Dictionary = GearDatabase.get_hook(hook_id)
+
+	var home_amount := GameState.get_home_equipment_count(
+		"hook",
+		hook_id
+	)
+
+	var tackle_amount := GameState.get_loaded_equipment_count_by_id(
+		"hook",
+		hook_id
+	)
+
+	var row := HBoxContainer.new()
+	bait_list.add_child(row)
+
+	var name_label := Label.new()
+	name_label.text = hook.get("name", hook_id)
+	name_label.custom_minimum_size.x = 180
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(name_label)
+
+	var home_label := Label.new()
+	home_label.text = "Home: %d" % home_amount
+	home_label.custom_minimum_size.x = 100
+	row.add_child(home_label)
+
+	var load_button := Button.new()
+	load_button.text = "→"
+	load_button.disabled = (
+		home_amount <= 0
+		or not GameState.has_tackle_space()
+	)
+	load_button.pressed.connect(
+		_on_load_hook.bind(hook_id)
+	)
+	row.add_child(load_button)
+
+	var tackle_label := Label.new()
+	tackle_label.text = "Tackle: %d" % tackle_amount
+	tackle_label.custom_minimum_size.x = 100
+	row.add_child(tackle_label)
+
+	var unload_button := Button.new()
+	unload_button.text = "←"
+	unload_button.disabled = tackle_amount <= 0
+	unload_button.pressed.connect(
+		_on_unload_hook.bind(hook_id)
+	)
+	row.add_child(unload_button)
+
+func _on_load_hook(hook_id: String) -> void:
+	GameState.load_equipment_by_id(
+		"hook",
+		hook_id
+	)
+	_refresh()
+
+
+func _on_unload_hook(hook_id: String) -> void:
+	GameState.unload_equipment_by_id(
+		"hook",
+		hook_id
+	)
 	_refresh()
 
 func _on_skip_pressed() -> void:

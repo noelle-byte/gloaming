@@ -1,7 +1,6 @@
 class_name GearDatabase
 extends RefCounted
 
-
 const BAITS := {
 	"worms": {
 		"name": "Worms",

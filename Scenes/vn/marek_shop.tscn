@@ -85,18 +85,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HSeparator2" type="HSeparator" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=878090464]
-layout_mode = 2
-
-[node name="ItemScroll2" type="ScrollContainer" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=1024996945]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="HookList" type="VBoxContainer" parent="ShopPanel/ShopMargin/ShopVBox/ItemScroll2" unique_id=186241675]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="LeaveButton" type="Button" parent="ShopPanel/ShopMargin/ShopVBox" unique_id=124830320]
 unique_name_in_owner = true
 layout_mode = 2

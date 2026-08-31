@@ -214,29 +214,37 @@ func _end_conversation() -> void:
 func _show_catches() -> void:
 	catch_panel.show()
 
-	var fish_counts: Dictionary = {}
+	var fish_rows: Dictionary = {}
 
 	for fish in GameState.catches:
 		var fish_name: String = fish["name"]
 
-		fish_counts[fish_name] = (
-			fish_counts.get(fish_name, 0)
-			+ 1
+		if not fish_rows.has(fish_name):
+			fish_rows[fish_name] = {
+				"count": 0,
+				"value": 0
+			}
+
+		fish_rows[fish_name]["count"] += 1
+		fish_rows[fish_name]["value"] += int(
+			fish["value"]
 		)
 
-	if fish_counts.is_empty():
+	if fish_rows.is_empty():
 		catch_summary_label.text = "Nothing."
 	else:
 		var lines: Array[String] = []
-
-		var fish_names := fish_counts.keys()
+		var fish_names := fish_rows.keys()
 		fish_names.sort()
 
 		for fish_name in fish_names:
+			var row: Dictionary = fish_rows[fish_name]
+
 			lines.append(
-				"%s ×%d" % [
+				"%s ×%d — %d mk" % [
 					fish_name,
-					fish_counts[fish_name]
+					row["count"],
+					row["value"]
 				]
 			)
 

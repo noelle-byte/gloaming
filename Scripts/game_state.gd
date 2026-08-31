@@ -24,8 +24,6 @@ var inventory: Dictionary = {
 const CONDITION_PERFECT := "perfect"
 const CONDITION_DAMAGED := "damaged"
 
-# Every physical piece of equipment gets its own UID.
-# This lets us own duplicates with different conditions.
 var equipment_instances: Array[Dictionary] = [
 	{
 		"uid": 1,
@@ -258,6 +256,104 @@ func get_fishing_loadout_problem() -> String:
 
 func has_valid_fishing_loadout() -> bool:
 	return get_fishing_loadout_problem() == ""
+
+func get_home_equipment_count(
+	type: String,
+	gear_id: String
+) -> int:
+	var total := 0
+
+	for item in equipment_instances:
+		if (
+			item["type"] == type
+			and item["gear_id"] == gear_id
+			and not is_equipment_loaded(item["uid"])
+		):
+			total += 1
+
+	return total
+
+
+func get_loaded_equipment_count_by_id(
+	type: String,
+	gear_id: String
+) -> int:
+	var total := 0
+
+	for uid in tackle_equipment:
+		var item := get_equipment(uid)
+
+		if (
+			item.get("type", "") == type
+			and item.get("gear_id", "") == gear_id
+		):
+			total += 1
+
+	return total
+
+func load_equipment_by_id(
+	type: String,
+	gear_id: String
+) -> bool:
+	for item in equipment_instances:
+		if (
+			item["type"] == type
+			and item["gear_id"] == gear_id
+			and not is_equipment_loaded(item["uid"])
+		):
+			return load_equipment(item["uid"])
+
+	return false
+
+
+func unload_equipment_by_id(
+	type: String,
+	gear_id: String
+) -> bool:
+	for uid in tackle_equipment:
+		var item := get_equipment(uid)
+
+		if (
+			item.get("type", "") == type
+			and item.get("gear_id", "") == gear_id
+		):
+			return unload_equipment(uid)
+
+	return false
+
+func get_loaded_equipment_counts(type: String) -> Dictionary:
+	var result := {}
+
+	for uid in tackle_equipment:
+		var item := get_equipment(uid)
+
+		if item.get("type", "") != type:
+			continue
+
+		var gear_id: String = item["gear_id"]
+
+		result[gear_id] = (
+			result.get(gear_id, 0)
+			+ 1
+		)
+
+	return result
+
+
+func get_loaded_equipment_uid(
+	type: String,
+	gear_id: String
+) -> int:
+	for uid in tackle_equipment:
+		var item := get_equipment(uid)
+
+		if (
+			item.get("type", "") == type
+			and item.get("gear_id", "") == gear_id
+		):
+			return uid
+
+	return 0
 
 ### DAY
 
