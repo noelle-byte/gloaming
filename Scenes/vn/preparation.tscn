@@ -55,9 +55,16 @@ theme_override_constants/margin_bottom = 24
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=515303271]
+[node name="TopRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1652713938]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TopRow" unique_id=515303271]
 layout_mode = 2
 text = "PREPARE FOR THE GLOAMING"
+
+[node name="HintLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TopRow" unique_id=1706930660]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="MoneyLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1988060992]
 unique_name_in_owner = true
@@ -96,3 +103,8 @@ text = "back"
 unique_name_in_owner = true
 layout_mode = 2
 text = "go fishing"
+
+[node name="SkipGloamingButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=1646234715]
+unique_name_in_owner = true
+layout_mode = 2
+text = "skip night"

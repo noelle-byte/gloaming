@@ -21,27 +21,243 @@ var inventory: Dictionary = {
 
 ### EQUIPMENT
 
-var owned_rods: Array[String] = [
-	"old_ash"
+const CONDITION_PERFECT := "perfect"
+const CONDITION_DAMAGED := "damaged"
+
+# Every physical piece of equipment gets its own UID.
+# This lets us own duplicates with different conditions.
+var equipment_instances: Array[Dictionary] = [
+	{
+		"uid": 1,
+		"type": "rod",
+		"gear_id": "old_ash",
+		"condition": CONDITION_PERFECT
+	},
+	{
+		"uid": 2,
+		"type": "line",
+		"gear_id": "hemp",
+		"condition": CONDITION_PERFECT
+	},
+	{
+		"uid": 3,
+		"type": "hook",
+		"gear_id": "standard",
+		"condition": CONDITION_PERFECT
+	}
 ]
 
-var owned_hooks: Array[String] = [
-	"standard"
+var next_equipment_uid: int = 4
+
+var tackle_equipment: Array[int] = [
+	1,
+	2,
+	3
 ]
+
+var tackle_capacity: int = 7
+
+var active_rod_uid: int = 1
+var active_line_uid: int = 2
+var active_hook_uid: int = 3
 
 var equipped_rod: String = "old_ash"
 var equipped_line: String = "hemp"
 var equipped_hook: String = "standard"
+
 var equipped_lantern: String = "none"
 var equipped_talisman: String = "none"
 
+func add_equipment(
+	type: String,
+	gear_id: String,
+	condition: String = CONDITION_PERFECT
+) -> int:
+	var uid := next_equipment_uid
+	next_equipment_uid += 1
 
-### BAIT POUCH
+	equipment_instances.append({
+		"uid": uid,
+		"type": type,
+		"gear_id": gear_id,
+		"condition": condition
+	})
+
+	return uid
+
+
+func get_equipment(uid: int) -> Dictionary:
+	for item in equipment_instances:
+		if item["uid"] == uid:
+			return item
+
+	return {}
+
+
+func get_equipment_count(
+	type: String,
+	gear_id: String
+) -> int:
+	var total := 0
+
+	for item in equipment_instances:
+		if (
+			item["type"] == type
+			and item["gear_id"] == gear_id
+		):
+			total += 1
+
+	return total
+
+
+func get_equipment_of_type(
+	type: String
+) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+
+	for item in equipment_instances:
+		if item["type"] == type:
+			result.append(item)
+
+	return result
+
+
+func is_equipment_loaded(uid: int) -> bool:
+	return uid in tackle_equipment
+
+func get_loaded_equipment_count(
+	type: String = ""
+) -> int:
+	var total := 0
+
+	for uid in tackle_equipment:
+		var item := get_equipment(uid)
+
+		if item.is_empty():
+			continue
+
+		if type == "" or item["type"] == type:
+			total += 1
+
+	return total
+
+
+func get_tackle_slots_used() -> int:
+	return (
+		tackle_equipment.size()
+		+ get_loaded_bait_count()
+	)
+
+
+func has_tackle_space() -> bool:
+	return get_tackle_slots_used() < tackle_capacity
 
 var bait_pouch: Dictionary = {}
 
-var bait_pouch_capacity: int = 4
+func load_equipment(uid: int) -> bool:
+	if get_equipment(uid).is_empty():
+		return false
 
+	if is_equipment_loaded(uid):
+		return false
+
+	if not has_tackle_space():
+		return false
+
+	tackle_equipment.append(uid)
+	return true
+
+
+func unload_equipment(uid: int) -> bool:
+	if not is_equipment_loaded(uid):
+		return false
+
+	tackle_equipment.erase(uid)
+
+	var item := get_equipment(uid)
+
+	if not item.is_empty():
+		_refresh_active_equipment(item["type"])
+
+	return true
+
+func _refresh_active_equipment(type: String) -> void:
+	var current_uid := 0
+
+	match type:
+		"rod":
+			current_uid = active_rod_uid
+		"line":
+			current_uid = active_line_uid
+		"hook":
+			current_uid = active_hook_uid
+
+	if current_uid in tackle_equipment:
+		return
+
+	for uid in tackle_equipment:
+		var item := get_equipment(uid)
+
+		if item.get("type", "") == type:
+			set_active_equipment(uid)
+			return
+
+	match type:
+		"rod":
+			active_rod_uid = 0
+			equipped_rod = ""
+		"line":
+			active_line_uid = 0
+			equipped_line = ""
+		"hook":
+			active_hook_uid = 0
+			equipped_hook = ""
+
+func set_active_equipment(uid: int) -> bool:
+	if not is_equipment_loaded(uid):
+		return false
+
+	var item := get_equipment(uid)
+
+	if item.is_empty():
+		return false
+
+	match item["type"]:
+		"rod":
+			active_rod_uid = uid
+			equipped_rod = item["gear_id"]
+
+		"line":
+			active_line_uid = uid
+			equipped_line = item["gear_id"]
+
+		"hook":
+			active_hook_uid = uid
+			equipped_hook = item["gear_id"]
+
+		_:
+			return false
+
+	return true
+
+func get_fishing_loadout_problem() -> String:
+	if get_loaded_equipment_count("rod") <= 0:
+		return "No rod loaded."
+
+	if get_loaded_equipment_count("line") <= 0:
+		return "No line loaded."
+
+	if get_loaded_equipment_count("hook") <= 0:
+		return "No hook loaded."
+
+	if get_loaded_bait_count() <= 0:
+		return "No bait loaded."
+
+	return ""
+
+
+func has_valid_fishing_loadout() -> bool:
+	return get_fishing_loadout_problem() == ""
 
 ### DAY
 
@@ -204,15 +420,35 @@ func remove_item(
 
 	return true
 
+func owns_rod(rod_id: String) -> bool:
+	return get_equipment_count(
+		"rod",
+		rod_id
+	) > 0
+
+
+func add_rod(rod_id: String) -> bool:
+	add_equipment(
+		"rod",
+		rod_id
+	)
+
+	return true
+
+
 func owns_hook(hook_id: String) -> bool:
-	return hook_id in owned_hooks
+	return get_equipment_count(
+		"hook",
+		hook_id
+	) > 0
 
 
 func add_hook(hook_id: String) -> bool:
-	if owns_hook(hook_id):
-		return false
+	add_equipment(
+		"hook",
+		hook_id
+	)
 
-	owned_hooks.append(hook_id)
 	return true
 
 
@@ -235,16 +471,42 @@ func reset_run() -> void:
 		"worms": 8
 	}
 
-	owned_rods = [
-		"old_ash"
+	equipment_instances = [
+	{
+		"uid": 1,
+		"type": "rod",
+		"gear_id": "old_ash",
+		"condition": CONDITION_PERFECT
+	},
+	{
+		"uid": 2,
+		"type": "line",
+		"gear_id": "hemp",
+		"condition": CONDITION_PERFECT
+	},
+	{
+		"uid": 3,
+		"type": "hook",
+		"gear_id": "standard",
+		"condition": CONDITION_PERFECT
+	}
+]
+
+	next_equipment_uid = 4
+
+	tackle_equipment = [
+		1,
+		2,
+		3
 	]
-	
+
+	active_rod_uid = 1
+	active_line_uid = 2
+	active_hook_uid = 3
 
 	equipped_rod = "old_ash"
 	equipped_line = "hemp"
 	equipped_hook = "standard"
-	equipped_lantern = "none"
-	equipped_talisman = "none"
 
 	bait_pouch.clear()
 
@@ -279,10 +541,7 @@ func get_loaded_bait_count() -> int:
 
 
 func can_load_more_bait() -> bool:
-	return (
-		get_loaded_bait_count()
-		< bait_pouch_capacity
-	)
+	return has_tackle_space()
 
 
 func load_bait(
@@ -382,18 +641,6 @@ func sell_all_catches() -> int:
 	catches.clear()
 
 	return total
-
-func owns_rod(rod_id: String) -> bool:
-	return rod_id in owned_rods
-
-
-func add_rod(rod_id: String) -> bool:
-	if owns_rod(rod_id):
-		return false
-
-	owned_rods.append(rod_id)
-	return true
-
 
 func equip_rod(rod_id: String) -> bool:
 	if not owns_rod(rod_id):
