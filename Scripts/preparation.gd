@@ -9,43 +9,22 @@ extends Control
 @onready var back_button: Button = %BackButton
 @onready var go_fishing_button: Button = %GoFishingButton
 @onready var skip_button: Button = %SkipGloamingButton
-
-var skip_confirmation: ConfirmationDialog
+@onready var skip_confirmation: ConfirmationDialog = %SkipConfirmation
 
 func _ready() -> void:
 	back_button.pressed.connect(_on_back_pressed)
-	go_fishing_button.pressed.connect(_on_go_fishing_pressed)
+
+	go_fishing_button.pressed.connect(
+		_on_go_fishing_pressed
+	)
 
 	skip_button.pressed.connect(
-	_on_skip_pressed
-)
-
-	skip_confirmation = ConfirmationDialog.new()
-	skip_confirmation.title = "Skip the Gloaming?"
-	skip_confirmation.dialog_text = (
-		"Return home without fishing?\n"
-		+ "Any remaining daytime will be lost."
+		_on_skip_pressed
 	)
-	skip_confirmation.ok_button_text = "Go Home"
 
 	skip_confirmation.confirmed.connect(
 		_on_skip_confirmed
 	)
-
-	add_child(skip_confirmation)
-
-	_create_section("BAIT")
-
-	for bait_id in bait_ids:
-		_create_bait_row(bait_id)
-
-	_create_section("HOOKS")
-
-	var hook_ids := GearDatabase.HOOKS.keys()
-	hook_ids.sort()
-
-	for hook_id in hook_ids:
-		_create_hook_row(hook_id)
 
 	_refresh()
 
@@ -139,9 +118,10 @@ func _refresh() -> void:
 	for child in bait_list.get_children():
 		child.queue_free()
 
-	money_label.text = "Money: %d mk" % GameState.money
-
-	var loaded := GameState.get_loaded_bait_count()
+	money_label.text = (
+		"Money: %d mk"
+		% GameState.money
+	)
 
 	capacity_label.text = (
 		"Tackle box: %d / %d"
@@ -151,20 +131,39 @@ func _refresh() -> void:
 		]
 	)
 
-	var bait_ids := GearDatabase.BAITS.keys()
+	_create_section("BAIT")
+
+	var bait_ids: Array = GearDatabase.BAITS.keys()
 	bait_ids.sort()
 
-	for bait_id in bait_ids:
+	for bait_id_value in bait_ids:
+		var bait_id: String = str(bait_id_value)
 		_create_bait_row(bait_id)
 
-	var problem := GameState.get_fishing_loadout_problem()
+	_create_section("HOOKS")
+
+	var hook_ids: Array = GearDatabase.HOOKS.keys()
+	hook_ids.sort()
+
+	for hook_id_value in hook_ids:
+		var hook_id: String = str(hook_id_value)
+		_create_hook_row(hook_id)
+
+	var problem: String = (
+		GameState.get_fishing_loadout_problem()
+	)
 
 	go_fishing_button.disabled = problem != ""
 
 	if problem == "":
 		hint_label.text = "Ready for the gloaming."
 	else:
-		hint_label.text = "Cannot fish: " + problem
+		hint_label.text = (
+			"Cannot fish: "
+			+ problem
+		)
+
+
 
 func _create_bait_row(bait_id: String) -> void:
 	var bait: Dictionary = GearDatabase.get_bait(bait_id)

@@ -12,6 +12,7 @@ var failed := false
 
 @onready var catch_area: Area2D = $CatchArea
 
+
 @export var descent_speed: float = 100.0
 
 @onready var camera: Camera2D = $"../World/Camera2D"
@@ -21,6 +22,11 @@ var offscreen_fraction_to_fail: float = 0.9
 
 @onready var body_collision: CollisionShape2D = $CollisionShape2D
 
+@onready var catch_collision: CollisionShape2D = (
+	$CatchArea/CollisionShape2D
+)
+
+
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
@@ -29,6 +35,22 @@ func _ready() -> void:
 
 	catch_area.area_entered.connect(_on_catch_area_entered)
 
+func apply_equipped_hook() -> void:
+	var hook_data: Dictionary = GearDatabase.get_hook(
+		GameState.equipped_hook
+	)
+
+	var radius: float = float(
+		hook_data.get("radius", 22.0)
+	)
+
+	var body_shape := CircleShape2D.new()
+	body_shape.radius = radius
+	body_collision.shape = body_shape
+
+	var catch_shape := CircleShape2D.new()
+	catch_shape.radius = radius
+	catch_collision.shape = catch_shape
 
 func _physics_process(_delta: float) -> void:
 	if not can_move:

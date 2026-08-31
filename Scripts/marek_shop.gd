@@ -26,7 +26,7 @@ func _refresh_shop() -> void:
 	for child in rod_list.get_children():
 		child.queue_free()
 
-	money_label.text = "%d mk" % GameState.money
+	money_label.text = "you have %d mk" % GameState.money
 
 	_create_section("BAIT")
 
@@ -256,7 +256,7 @@ func _get_hook_purchase_line(
 
 	match hook_id:
 		"bigboy":
-			return "Not much that could wiggle free from that beauty."
+			return "Not much can wiggle free from that beauty."
 
 		_:
 			return "Good hook."
