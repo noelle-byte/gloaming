@@ -4,7 +4,7 @@ extends Node
 
 var day: int = 1
 
-var money: int = 1000
+var money: int = 1000 #  CHANGE LATER
 
 
 ### CAUGHT FISH
@@ -53,7 +53,7 @@ var tackle_equipment: Array[int] = [
 	3
 ]
 
-var tackle_capacity: int = 7
+var tackle_capacity: int = 100 # CHANGE LATER
 
 var active_rod_uid: int = 1
 var active_line_uid: int = 2
@@ -949,6 +949,9 @@ func sell_one_catch(fish_name: String) -> int:
 func get_fish_sold_total(fish_name: String) -> int:
 	return fish_sold_totals.get(fish_name, 0)
 
+func add_line(line_id: String) -> bool:
+	add_equipment("line", line_id)
+	return true
 
 func buy_market_fish(
 	fish_name: String,

@@ -255,8 +255,17 @@ func _buy_hook(hook_id: String) -> void:
 
 func _buy_line(line_id: String) -> void:
 	var line: Dictionary = GearDatabase.get_line(line_id)
+	var price: int = int(line.get("price", 0))
 
-	var price: int = line.get("price", 0)
+	if not GameState.spend_money(price):
+		return
+
+	GameState.add_equipment(
+		"line",
+		line_id
+	)
+
+	_refresh_shop()
 
 	if not GameState.spend_money(price):
 		_set_dialogue(
