@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://4ur6gvcy7eg3" path="res://Scenes/fishing/fish/pale_char.tscn" id="4_46q8q"]
 [ext_resource type="PackedScene" uid="uid://m83v5667y1tr" path="res://Scenes/fishing/chunks/entry_chunk.tscn" id="4_qsnlf"]
 [ext_resource type="PackedScene" uid="uid://d210cwd6v5q2u" path="res://Scenes/fishing/obstacles/rock.tscn" id="5_qsnlf"]
+[ext_resource type="PackedScene" uid="uid://cmqnw2kaaxxim" path="res://Scenes/fishing/fish/greyjaw.tscn" id="7_uin0a"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qsnlf"]
 radius = 22.0
@@ -20,7 +21,7 @@ script = ExtResource("1_hiiat")
 script = ExtResource("3_nwjj7")
 scroll_speed = 100.0
 chunk_scenes = Array[PackedScene]([ExtResource("3_46q8q"), ExtResource("4_qsnlf")])
-fish_scenes = Array[PackedScene]([ExtResource("3_hit5c"), ExtResource("4_46q8q")])
+fish_scenes = Array[PackedScene]([ExtResource("3_hit5c"), ExtResource("4_46q8q"), ExtResource("7_uin0a")])
 obstacle_scenes = Array[PackedScene]([ExtResource("5_qsnlf")])
 corruption_depth_step = 60.0
 

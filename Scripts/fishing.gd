@@ -172,16 +172,48 @@ func _go_to_night() -> void:
 	)
 
 func _on_fish_caught(fish: Area2D) -> void:
+	var caught_fish := fish as Fish
+
+	if caught_fish == null:
+		return
+
+	var hook_data: Dictionary = GearDatabase.get_hook(
+		GameState.equipped_hook
+	)
+
+	var hook_power: int = int(
+		hook_data.get("power", 1)
+	)
+
+	if hook_power < caught_fish.required_hook_power:
+		world.stop_scrolling()
+
+		print(
+			caught_fish.display_name,
+			" is too large for ",
+			hook_data.get(
+				"name",
+				GameState.equipped_hook
+			)
+		)
+
+		caught_fish.queue_free()
+
+		await get_tree().create_timer(0.5).timeout
+		start_new_cast()
+		return
+
 	world.stop_scrolling()
+	current_fish = caught_fish
 
-	current_fish = fish as Fish
-
-	if current_fish != null:
-		current_fish.on_caught()
+	current_fish.on_caught()
 
 	print("Caught ", fish.name)
 
-	call_deferred("reel_in", fish)
+	call_deferred(
+		"reel_in",
+		caught_fish
+	)
 
 func _on_cast_failed(reason: String) -> void:
 	world.stop_scrolling()

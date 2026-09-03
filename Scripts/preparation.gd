@@ -36,24 +36,32 @@ func _create_section(title: String) -> void:
 	var separator := HSeparator.new()
 	bait_list.add_child(separator)
 
-func _create_hook_row(hook_id: String) -> void:
-	var hook: Dictionary = GearDatabase.get_hook(hook_id)
-
-	var home_amount := GameState.get_home_equipment_count(
-		"hook",
-		hook_id
+func _create_equipment_row(
+	type: String,
+	gear_id: String,
+	data: Dictionary
+) -> void:
+	var home_amount: int = GameState.get_home_equipment_count(
+		type,
+		gear_id
 	)
 
-	var tackle_amount := GameState.get_loaded_equipment_count_by_id(
-		"hook",
-		hook_id
+	var tackle_amount: int = (
+		GameState.get_loaded_equipment_count_by_id(
+			type,
+			gear_id
+		)
 	)
+
+	# Preparation is inventory management, not a catalogue.
+	if home_amount <= 0 and tackle_amount <= 0:
+		return
 
 	var row := HBoxContainer.new()
 	bait_list.add_child(row)
 
 	var name_label := Label.new()
-	name_label.text = hook.get("name", hook_id)
+	name_label.text = data.get("name", gear_id)
 	name_label.custom_minimum_size.x = 180
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(name_label)
@@ -70,7 +78,7 @@ func _create_hook_row(hook_id: String) -> void:
 		or not GameState.has_tackle_space()
 	)
 	load_button.pressed.connect(
-		_on_load_hook.bind(hook_id)
+		_on_load_equipment.bind(type, gear_id)
 	)
 	row.add_child(load_button)
 
@@ -83,22 +91,29 @@ func _create_hook_row(hook_id: String) -> void:
 	unload_button.text = "←"
 	unload_button.disabled = tackle_amount <= 0
 	unload_button.pressed.connect(
-		_on_unload_hook.bind(hook_id)
+		_on_unload_equipment.bind(type, gear_id)
 	)
 	row.add_child(unload_button)
 
-func _on_load_hook(hook_id: String) -> void:
+
+func _on_load_equipment(
+	type: String,
+	gear_id: String
+) -> void:
 	GameState.load_equipment_by_id(
-		"hook",
-		hook_id
+		type,
+		gear_id
 	)
 	_refresh()
 
 
-func _on_unload_hook(hook_id: String) -> void:
+func _on_unload_equipment(
+	type: String,
+	gear_id: String
+) -> void:
 	GameState.unload_equipment_by_id(
-		"hook",
-		hook_id
+		type,
+		gear_id
 	)
 	_refresh()
 
@@ -138,7 +153,36 @@ func _refresh() -> void:
 
 	for bait_id_value in bait_ids:
 		var bait_id: String = str(bait_id_value)
+
+		var home_amount: int = GameState.get_item_count(
+			bait_id
+		)
+
+		var pouch_amount: int = GameState.bait_pouch.get(
+			bait_id,
+			0
+		)
+
+		if home_amount <= 0 and pouch_amount <= 0:
+			continue
+
 		_create_bait_row(bait_id)
+
+
+	_create_section("RODS")
+
+	var rod_ids: Array = GearDatabase.RODS.keys()
+	rod_ids.sort()
+
+	for rod_id_value in rod_ids:
+		var rod_id: String = str(rod_id_value)
+
+		_create_equipment_row(
+			"rod",
+			rod_id,
+			GearDatabase.get_rod(rod_id)
+		)
+
 
 	_create_section("HOOKS")
 
@@ -147,7 +191,12 @@ func _refresh() -> void:
 
 	for hook_id_value in hook_ids:
 		var hook_id: String = str(hook_id_value)
-		_create_hook_row(hook_id)
+
+		_create_equipment_row(
+			"hook",
+			hook_id,
+			GearDatabase.get_hook(hook_id)
+		)
 
 	var problem: String = (
 		GameState.get_fishing_loadout_problem()

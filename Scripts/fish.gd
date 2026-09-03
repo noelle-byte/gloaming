@@ -4,7 +4,7 @@ extends Area2D
 @export var display_name: String = "Trout"
 @export var value: int = 3
 @export var corruption: int = 0
-
+@export var required_hook_power: int = 1
 
 func _ready() -> void:
 	add_to_group("fish")
@@ -52,8 +52,6 @@ func would_hit_obstacle(
 	query.collide_with_bodies = true
 	query.collide_with_areas = false
 
-	# Allows generation to keep fish a few pixels
-	# away from rock surfaces.
 	query.margin = margin
 
 	var hits := (

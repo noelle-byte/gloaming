@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cmqnw2kaaxxim"]
+
+[ext_resource type="Script" uid="uid://sr42qfkltglh" path="res://Scripts/normal_fish.gd" id="1_cvm04"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rfeyg"]
+radius = 22.0
+height = 160.0
+
+[node name="Fish3" type="Area2D" unique_id=1363872635 groups=["fish"]]
+collision_mask = 0
+script = ExtResource("1_cvm04")
+swim_speed = 60.0
+display_name = "Greyjaw"
+value = 28
+corruption = 3
+required_hook_power = 2
+
+[node name="Visual" type="Node2D" parent="." unique_id=32633442]
+
+[node name="Polygon2D" type="Polygon2D" parent="Visual" unique_id=1896026037]
+position = Vector2(-50, -8)
+polygon = PackedVector2Array(-43.921158, 10.269815, -17.049149, -15.888584, 34.73317, -17.754612, 49.194916, -39.21395, 64.12314, -17.754612, 114.97244, -15.422077, 135.96527, 5.104248, 156.9581, -14.95557, 184.94855, -18.221119, 167.68777, 11.635353, 179.8241, 38.68695, 153.69968, 29.823309, 135.97238, 18.160624, 117.3121, 34.48838, 49.202026, 38.68695, -19.84108, 28.423784)
+uv = PackedVector2Array(-43.921158, 10.269815, -17.049149, -15.888584, 34.73317, -17.754612, 49.194916, -39.21395, 64.12314, -17.754612, 114.97244, -15.422077, 135.96527, 5.104248, 156.9581, -14.95557, 184.94855, -18.221119, 167.68777, 11.635353, 179.8241, 38.68695, 153.69968, 29.823309, 135.97238, 18.160624, 117.3121, 34.48838, 49.202026, 38.68695, -19.84108, 28.423784)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=700750243]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_rfeyg")
