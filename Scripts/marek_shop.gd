@@ -49,6 +49,14 @@ func _refresh_shop() -> void:
 
 		_create_hook_row(hook_id)
 
+	_create_section("LINES")
+
+	for line_id in GearDatabase.LINES:
+		if line_id == "hemp":
+			continue
+
+		_create_line_row(line_id)
+
 func _create_section(title: String) -> void:
 	var label := Label.new()
 	label.text = title
@@ -156,6 +164,37 @@ func _create_hook_row(hook_id: String) -> void:
 
 	row.add_child(buy_button)
 
+func _create_line_row(line_id: String) -> void:
+	var line: Dictionary = GearDatabase.get_line(line_id)
+	var price: int = line.get("price", 0)
+	var owned := GameState.get_equipment_count("line", line_id)
+
+	var row := HBoxContainer.new()
+	rod_list.add_child(row)
+
+	var name_label := Label.new()
+	name_label.text = "%s ×%d" % [
+		line.get("name", line_id),
+		owned
+	]
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(name_label)
+
+	var price_label := Label.new()
+	price_label.text = "%d mk" % price
+	price_label.custom_minimum_size.x = 55
+	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.add_child(price_label)
+
+	var buy_button := Button.new()
+	buy_button.text = "Buy"
+	buy_button.disabled = not GameState.can_afford(price)
+	buy_button.pressed.connect(
+		_buy_line.bind(line_id)
+	)
+
+	row.add_child(buy_button)
+
 func _buy_bait(bait_id: String) -> void:
 	var bait: Dictionary = GearDatabase.get_bait(bait_id)
 
@@ -214,6 +253,24 @@ func _buy_hook(hook_id: String) -> void:
 
 	_refresh_shop()
 
+func _buy_line(line_id: String) -> void:
+	var line: Dictionary = GearDatabase.get_line(line_id)
+
+	var price: int = line.get("price", 0)
+
+	if not GameState.spend_money(price):
+		_set_dialogue(
+			"Put it back, Juhani."
+		)
+		return
+
+	GameState.add_line(line_id)
+
+	_set_dialogue(
+		_get_line_purchase_line(line_id)
+	)
+
+	_refresh_shop()
 
 func _get_bait_purchase_line(
 	bait_id: String
@@ -247,8 +304,25 @@ func _get_rod_purchase_line(
 		"split_cane":
 			return "Look after it. I don't keep many."
 
+		"reinforced_six_strip":
+			return "Bloody rare import, i only have the one so take good care of it."
+
 		_:
 			return "Good rod."
+
+func _get_line_purchase_line(
+	rod_id: String
+) -> String:
+
+	match rod_id:
+		"hemp":
+			return "A good line for normal fishing."
+
+		"reinforced_depth":
+			return "Strong enough to dredge up a whale, if we had any nearby."
+
+		_:
+			return "Good line."
 
 func _get_hook_purchase_line(
 	hook_id: String

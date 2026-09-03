@@ -14,7 +14,7 @@ extends Node2D
 
 var cast_started := false
 var current_fish: Fish
-
+var catch_gear_message: String = ""
 
 func _ready() -> void:
 	hook.fish_caught.connect(_on_fish_caught)
@@ -202,7 +202,49 @@ func _on_fish_caught(fish: Area2D) -> void:
 		await get_tree().create_timer(0.5).timeout
 		start_new_cast()
 		return
+	
+	var gear_result: Dictionary = (
+		GameState.stress_active_fishing_gear(
+			caught_fish.pull_strength
+		)
+	)
 
+	var gear_result_type: String = gear_result.get(
+		"result",
+		"safe"
+	)
+	
+	if gear_result_type == "damaged":
+		catch_gear_message = (
+			"%s was damaged."
+			% gear_result.get(
+				"name",
+				"Equipment"
+			)
+		)
+
+	if gear_result_type == "destroyed":
+		world.stop_scrolling()
+
+		var gear_name: String = gear_result.get(
+			"name",
+			"equipment"
+		)
+
+		print(
+			gear_name,
+			" broke under the pull of ",
+			caught_fish.display_name,
+			"."
+		)
+
+		caught_fish.queue_free()
+
+		await get_tree().create_timer(0.6).timeout
+
+		start_new_cast()
+		return
+	
 	world.stop_scrolling()
 	current_fish = caught_fish
 
@@ -246,7 +288,17 @@ func reel_in(fish: Fish) -> void:
 
 func show_catch(fish: Fish) -> void:
 	catch_name.text = fish.display_name
-	catch_value.text = "Value: " + str(fish.value) + " mk"
+
+	catch_value.text = (
+		"Value: %d mk"
+		% fish.value
+	)
+
+	if catch_gear_message != "":
+		catch_value.text += (
+			"\n\n"
+			+ catch_gear_message
+		)
 
 	catch_panel.show()
 

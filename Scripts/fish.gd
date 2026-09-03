@@ -5,6 +5,7 @@ extends Area2D
 @export var value: int = 3
 @export var corruption: int = 0
 @export var required_hook_power: int = 1
+@export var pull_strength: int = 1
 
 func _ready() -> void:
 	add_to_group("fish")

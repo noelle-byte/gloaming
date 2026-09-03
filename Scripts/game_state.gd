@@ -4,7 +4,7 @@ extends Node
 
 var day: int = 1
 
-var money: int = 100
+var money: int = 1000
 
 
 ### CAUGHT FISH
@@ -354,6 +354,170 @@ func get_loaded_equipment_uid(
 			return uid
 
 	return 0
+
+func get_active_equipment_uid(
+	type: String
+) -> int:
+	match type:
+		"rod":
+			return active_rod_uid
+
+		"line":
+			return active_line_uid
+
+		"hook":
+			return active_hook_uid
+
+	return 0
+
+func get_equipment_strength(uid: int) -> int:
+	var item: Dictionary = get_equipment(uid)
+
+	if item.is_empty():
+		return 0
+
+	var gear_data: Dictionary = GearDatabase.get_equipment(
+		item["type"],
+		item["gear_id"]
+	)
+
+	var strength: int = int(
+		gear_data.get("strength", 1)
+	)
+
+	# Damaged equipment is physically weaker.
+	if item.get("condition", CONDITION_PERFECT) == CONDITION_DAMAGED:
+		strength -= 1
+
+	return max(strength, 0)
+
+func damage_equipment(uid: int) -> bool:
+	for i in range(equipment_instances.size()):
+		if equipment_instances[i]["uid"] != uid:
+			continue
+
+		equipment_instances[i]["condition"] = (
+			CONDITION_DAMAGED
+		)
+
+		return true
+
+	return false
+
+func destroy_equipment(uid: int) -> Dictionary:
+	var destroyed_item: Dictionary = get_equipment(uid)
+
+	if destroyed_item.is_empty():
+		return {}
+
+	var equipment_type: String = destroyed_item["type"]
+
+	tackle_equipment.erase(uid)
+
+	for i in range(equipment_instances.size()):
+		if equipment_instances[i]["uid"] == uid:
+			equipment_instances.remove_at(i)
+			break
+
+	# Automatically switch to a loaded spare if one exists.
+	_refresh_active_equipment(equipment_type)
+
+	return destroyed_item
+
+func stress_active_fishing_gear(
+	pull_strength: int
+) -> Dictionary:
+	var active_uids: Array[int] = [
+		active_rod_uid,
+		active_line_uid,
+		active_hook_uid
+	]
+
+	var weakest_strength: int = 999
+	var weakest_uids: Array[int] = []
+
+	for uid in active_uids:
+		if uid <= 0:
+			continue
+
+		var strength: int = get_equipment_strength(uid)
+
+		if strength < weakest_strength:
+			weakest_strength = strength
+			weakest_uids.clear()
+			weakest_uids.append(uid)
+
+		elif strength == weakest_strength:
+			weakest_uids.append(uid)
+
+	# The entire rig can handle the fish.
+	if weakest_strength >= pull_strength:
+		return {
+			"result": "safe"
+		}
+
+	if weakest_uids.is_empty():
+		return {
+			"result": "safe"
+		}
+
+	# If several pieces are equally weak, one gives first.
+	var stressed_uid: int = weakest_uids[
+		randi() % weakest_uids.size()
+	]
+
+	var item: Dictionary = get_equipment(stressed_uid)
+
+	if item.is_empty():
+		return {
+			"result": "safe"
+		}
+
+	var gear_data: Dictionary = GearDatabase.get_equipment(
+		item["type"],
+		item["gear_id"]
+	)
+
+	var gear_name: String = gear_data.get(
+		"name",
+		item["gear_id"]
+	)
+
+	var difference: int = (
+		pull_strength
+		- weakest_strength
+	)
+
+	# Badly outmatched gear snaps immediately.
+	if difference >= 2:
+		destroy_equipment(stressed_uid)
+
+		return {
+			"result": "destroyed",
+			"name": gear_name,
+			"type": item["type"]
+		}
+
+	# Slightly outmatched.
+	if item.get(
+		"condition",
+		CONDITION_PERFECT
+	) == CONDITION_DAMAGED:
+		destroy_equipment(stressed_uid)
+
+		return {
+			"result": "destroyed",
+			"name": gear_name,
+			"type": item["type"]
+		}
+
+	damage_equipment(stressed_uid)
+
+	return {
+		"result": "damaged",
+		"name": gear_name,
+		"type": item["type"]
+	}
 
 ### DAY
 

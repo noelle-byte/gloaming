@@ -12,8 +12,9 @@ script = ExtResource("1_cvm04")
 swim_speed = 60.0
 display_name = "Greyjaw"
 value = 28
-corruption = 3
+corruption = 4
 required_hook_power = 2
+pull_strength = 3
 
 [node name="Visual" type="Node2D" parent="." unique_id=32633442]
 

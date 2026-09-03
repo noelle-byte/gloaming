@@ -198,6 +198,17 @@ func _refresh() -> void:
 			GearDatabase.get_hook(hook_id)
 		)
 
+	_create_section("LINES")
+
+	for line_id_value in GearDatabase.LINES.keys():
+		var line_id: String = str(line_id_value)
+
+		_create_equipment_row(
+			"line",
+			line_id,
+			GearDatabase.get_line(line_id)
+		)
+
 	var problem: String = (
 		GameState.get_fishing_loadout_problem()
 	)
