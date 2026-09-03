@@ -258,22 +258,13 @@ func _buy_line(line_id: String) -> void:
 	var price: int = int(line.get("price", 0))
 
 	if not GameState.spend_money(price):
+		_set_dialogue("Put it back, Juhani.")
 		return
 
 	GameState.add_equipment(
 		"line",
 		line_id
 	)
-
-	_refresh_shop()
-
-	if not GameState.spend_money(price):
-		_set_dialogue(
-			"Put it back, Juhani."
-		)
-		return
-
-	GameState.add_line(line_id)
 
 	_set_dialogue(
 		_get_line_purchase_line(line_id)

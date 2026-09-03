@@ -329,7 +329,8 @@ func _on_throw_back_pressed() -> void:
 
 
 func start_new_cast() -> void:
-	if GameState.get_loaded_bait_count() <= 0:
+	if not GameState.has_valid_fishing_loadout():
 		_end_fishing_night()
-	else:
-		get_tree().reload_current_scene()
+		return
+
+	get_tree().reload_current_scene()
