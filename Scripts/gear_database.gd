@@ -78,7 +78,8 @@ const HOOKS := {
 		"description": "Small and dependable.",
 		"price": 0,
 		"radius": 22.0,
-		"power": 1
+		"power": 1,
+		"strength": 1
 	},
 
 	"bigboy": {
@@ -86,7 +87,8 @@ const HOOKS := {
 		"description": "Made for fish that should probably be left alone.",
 		"price": 20,
 		"radius": 34.0,
-		"power": 2
+		"power": 2,
+		"strength": 3
 	}
 }
 
