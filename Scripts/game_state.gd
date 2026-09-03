@@ -163,6 +163,15 @@ func load_equipment(uid: int) -> bool:
 		return false
 
 	tackle_equipment.append(uid)
+
+	var item: Dictionary = get_equipment(uid)
+
+	if (
+		not item.is_empty()
+		and get_active_equipment_uid(item["type"]) == 0
+	):
+		set_active_equipment(uid)
+
 	return true
 
 
@@ -726,6 +735,7 @@ func reset_run() -> void:
 	money = 5
 
 	catches.clear()
+	shop_equipment_purchases.clear()
 
 	inventory = {
 		"worms": 8
@@ -1007,3 +1017,59 @@ func get_missing_day_1_visits() -> Array[String]:
 			missing.append(person_id)
 
 	return missing
+
+var shop_equipment_purchases: Dictionary = {}
+
+
+func _shop_equipment_key(
+	type: String,
+	gear_id: String
+) -> String:
+	return type + ":" + gear_id
+
+
+func can_buy_shop_equipment(
+	type: String,
+	gear_id: String
+) -> bool:
+	var data: Dictionary = GearDatabase.get_equipment(
+		type,
+		gear_id
+	)
+
+	if data.is_empty():
+		return false
+
+	if not bool(data.get("shop_available", true)):
+		return false
+
+	var limit: int = int(
+		data.get("shop_limit", -1)
+	)
+
+	if limit < 0:
+		return true
+
+	var key := _shop_equipment_key(
+		type,
+		gear_id
+	)
+
+	return int(
+		shop_equipment_purchases.get(key, 0)
+	) < limit
+
+
+func record_shop_equipment_purchase(
+	type: String,
+	gear_id: String
+) -> void:
+	var key := _shop_equipment_key(
+		type,
+		gear_id
+	)
+
+	shop_equipment_purchases[key] = (
+		int(shop_equipment_purchases.get(key, 0))
+		+ 1
+	)

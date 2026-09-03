@@ -36,65 +36,167 @@ func _create_section(title: String) -> void:
 	var separator := HSeparator.new()
 	bait_list.add_child(separator)
 
-func _create_equipment_row(
-	type: String,
-	gear_id: String,
-	data: Dictionary
+func _create_equipment_instance_row(
+	item: Dictionary
 ) -> void:
-	var home_amount: int = GameState.get_home_equipment_count(
+	var uid: int = int(item["uid"])
+	var type: String = str(item["type"])
+	var gear_id: String = str(item["gear_id"])
+
+	var data: Dictionary = GearDatabase.get_equipment(
 		type,
 		gear_id
 	)
 
-	var tackle_amount: int = (
-		GameState.get_loaded_equipment_count_by_id(
-			type,
-			gear_id
-		)
-	)
-
-	# Preparation is inventory management, not a catalogue.
-	if home_amount <= 0 and tackle_amount <= 0:
+	if data.is_empty():
 		return
+
+	var loaded := GameState.is_equipment_loaded(uid)
+
+	var active := (
+		loaded
+		and GameState.get_active_equipment_uid(type) == uid
+	)
 
 	var row := HBoxContainer.new()
 	bait_list.add_child(row)
 
 	var name_label := Label.new()
-	name_label.text = data.get("name", gear_id)
-	name_label.custom_minimum_size.x = 180
-	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.text = data.get(
+		"name",
+		gear_id
+	)
+	name_label.custom_minimum_size.x = 220
+	name_label.size_flags_horizontal = (
+		Control.SIZE_EXPAND_FILL
+	)
 	row.add_child(name_label)
 
-	var home_label := Label.new()
-	home_label.text = "Home: %d" % home_amount
-	home_label.custom_minimum_size.x = 100
-	row.add_child(home_label)
+	var condition_label := Label.new()
 
-	var load_button := Button.new()
-	load_button.text = "→"
-	load_button.disabled = (
-		home_amount <= 0
-		or not GameState.has_tackle_space()
+	if item.get(
+		"condition",
+		GameState.CONDITION_PERFECT
+	) == GameState.CONDITION_DAMAGED:
+		condition_label.text = "Damaged"
+	else:
+		condition_label.text = "Perfect"
+
+	condition_label.custom_minimum_size.x = 80
+	row.add_child(condition_label)
+
+	var location_label := Label.new()
+	location_label.text = (
+		"Tackle"
+		if loaded
+		else "Home"
 	)
-	load_button.pressed.connect(
-		_on_load_equipment.bind(type, gear_id)
-	)
-	row.add_child(load_button)
+	location_label.custom_minimum_size.x = 70
+	row.add_child(location_label)
 
-	var tackle_label := Label.new()
-	tackle_label.text = "Tackle: %d" % tackle_amount
-	tackle_label.custom_minimum_size.x = 100
-	row.add_child(tackle_label)
+	if loaded:
+		var use_button := Button.new()
 
-	var unload_button := Button.new()
-	unload_button.text = "←"
-	unload_button.disabled = tackle_amount <= 0
-	unload_button.pressed.connect(
-		_on_unload_equipment.bind(type, gear_id)
-	)
-	row.add_child(unload_button)
+		if active:
+			use_button.text = "Active"
+			use_button.disabled = true
+		else:
+			use_button.text = "Use"
+			use_button.pressed.connect(
+				_on_use_equipment.bind(uid)
+			)
 
+		row.add_child(use_button)
+
+		var unload_button := Button.new()
+		unload_button.text = "←"
+		unload_button.pressed.connect(
+			_on_unload_equipment_uid.bind(uid)
+		)
+		row.add_child(unload_button)
+
+	else:
+		var load_button := Button.new()
+		load_button.text = "→"
+		load_button.disabled = (
+			not GameState.has_tackle_space()
+		)
+		load_button.pressed.connect(
+			_on_load_equipment_uid.bind(uid)
+		)
+		row.add_child(load_button)
+
+func _on_load_equipment_uid(uid: int) -> void:
+	GameState.load_equipment(uid)
+	_refresh()
+
+
+func _on_unload_equipment_uid(uid: int) -> void:
+	GameState.unload_equipment(uid)
+	_refresh()
+
+func _create_normal_equipment_section(
+	title: String,
+	type: String
+) -> void:
+	var items: Array[Dictionary] = []
+
+	for item in GameState.equipment_instances:
+		if item.get("type", "") != type:
+			continue
+
+		var data: Dictionary = GearDatabase.get_equipment(
+			type,
+			item.get("gear_id", "")
+		)
+
+		if bool(data.get("special", false)):
+			continue
+
+		items.append(item)
+
+	if items.is_empty():
+		return
+
+	_create_section(title)
+
+	for item in items:
+		_create_equipment_instance_row(item)
+
+
+func _create_special_equipment_section() -> void:
+	var items: Array[Dictionary] = []
+
+	for item in GameState.equipment_instances:
+		var type: String = item.get(
+			"type",
+			""
+		)
+
+		var gear_id: String = item.get(
+			"gear_id",
+			""
+		)
+
+		var data: Dictionary = GearDatabase.get_equipment(
+			type,
+			gear_id
+		)
+
+		if bool(data.get("special", false)):
+			items.append(item)
+
+	if items.is_empty():
+		return
+
+	_create_section("SPECIAL EQUIPMENT")
+
+	for item in items:
+		_create_equipment_instance_row(item)
+
+func _on_use_equipment(uid: int) -> void:
+	GameState.set_active_equipment(uid)
+	_refresh()
 
 func _on_load_equipment(
 	type: String,

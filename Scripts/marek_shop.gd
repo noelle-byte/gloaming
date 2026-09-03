@@ -124,11 +124,20 @@ func _create_rod_row(rod_id: String) -> void:
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	row.add_child(price_label)
 
-	var buy_button := Button.new()
-	buy_button.text = "Buy"
-	buy_button.disabled = not GameState.can_afford(price)
-	buy_button.pressed.connect(
-		_buy_rod.bind(rod_id)
+	var available := GameState.can_buy_shop_equipment(
+		"rod",
+		rod_id
+	)
+
+	buy_button.text = (
+		"Buy"
+		if available
+		else "Sold"
+	)
+
+	buy_button.disabled = (
+		not available
+		or not GameState.can_afford(price)
 	)
 
 	row.add_child(buy_button)
@@ -218,6 +227,12 @@ func _buy_bait(bait_id: String) -> void:
 func _buy_rod(rod_id: String) -> void:
 	var rod: Dictionary = GearDatabase.get_rod(rod_id)
 
+	if not GameState.can_buy_shop_equipment(
+		"rod",
+		rod_id
+	):
+		return
+
 	var price: int = rod.get("price", 0)
 
 	if not GameState.spend_money(price):
@@ -227,6 +242,11 @@ func _buy_rod(rod_id: String) -> void:
 		return
 
 	GameState.add_rod(rod_id)
+
+	GameState.record_shop_equipment_purchase(
+		"rod",
+		rod_id
+	)
 
 	_set_dialogue(
 		_get_rod_purchase_line(rod_id)

@@ -63,12 +63,16 @@ const RODS := {
 	},
 
 	"reinforced_six_strip": {
-		"name": "Reinforced tonkin Six Strip Rod",
-		"description": "tonkin bamboo reinforced with thin metal plates, durable, light and precise.",
+		"name": "Reinforced Tonkin Six-Strip Rod",
+		"description": "Tonkin bamboo reinforced with thin metal plates. Durable, light and precise.",
 		"price": 52,
 		"move_multiplier": 1.2,
 		"tremor_multiplier": 1.1,
-		"strength": 3
+		"strength": 3,
+
+		"special": true,
+		"shop_available": true,
+		"shop_limit": 1
 	}
 }
 
